@@ -3,6 +3,14 @@ import knaus2 from "@/assets/knaus-sun-traveller-2.jpg";
 import knaus3 from "@/assets/knaus-sun-traveller-3.jpg";
 import knaus4 from "@/assets/knaus-sun-traveller-4.jpg";
 import knaus5 from "@/assets/knaus-sun-traveller-5.jpg";
+import rimor1 from "@/assets/rimor-europeo-1.jpg";
+import rimor2 from "@/assets/rimor-europeo-2.jpg";
+import rimor3 from "@/assets/rimor-europeo-3.jpg";
+import rimor4 from "@/assets/rimor-europeo-4.jpg";
+import rimor5 from "@/assets/rimor-europeo-5.jpg";
+import rimor6 from "@/assets/rimor-europeo-6.jpg";
+import rimor7 from "@/assets/rimor-europeo-7.jpg";
+import rimor8 from "@/assets/rimor-europeo-8.jpg";
 
 export interface Vehicle {
   id: string;
@@ -37,6 +45,23 @@ export const vehicles: Vehicle[] = [
     features: ["Aria condizionata", "Pannello solare", "Doppio serbatoio acqua", "Porta bici/scooter", "Vetri elettrici", "Specchietti elettrici", "Cucina", "Bagno"],
     description: "Il Knaus Sun Traveller è un camper perfetto per una famiglia con bambini piccoli, molto comodo da guidare, con aria condizionata in cabina, vetri e specchietti elettrici. Ha due serbatoi di acqua e il pannello solare, per un'autonomia maggiore in sosta libera. Completo di porta bici o scooter, sarà un ottimo compagno di viaggio.",
     shortDescription: "Perfetto per famiglie con bambini. Comodo, autonomo e ben accessoriato.",
+    location: "Milano",
+    available: true,
+  },
+  {
+    id: "rimor-europeo-ng6",
+    name: "Rimor Europeo NG6",
+    type: "motorhome",
+    typeLabel: "Motorhome",
+    image: rimor1,
+    images: [rimor1, rimor2, rimor3, rimor4, rimor5, rimor6, rimor7, rimor8],
+    pricePerDay: 99,
+    capacity: 6,
+    beds: 6,
+    length: "6.7m",
+    features: ["Aria condizionata", "Doppio serbatoio acqua", "Porta bici", "Cucina", "Bagno con doccia", "Letti a castello", "Letto mansarda", "Dinette"],
+    description: "Il Rimor Europeo NG6 è un camper 6 posti molto spazioso. È provvisto di aria condizionata in cabina, doppio serbatoio di acqua e porta bici. Comodo da guidare e spazioso per tutta la famiglia, saprà condurti ovunque in piena sicurezza.",
+    shortDescription: "6 posti, spazioso e sicuro. Ideale per tutta la famiglia.",
     location: "Milano",
     available: true,
   },
