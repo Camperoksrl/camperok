@@ -2,7 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import { vehicles } from "@/data/vehicles";
+import { vehicles, getMinPrice, calculateTotalPrice } from "@/data/vehicles";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -45,7 +45,8 @@ const VehicleDetail = () => {
   };
 
   const days = getDayCount();
-  const totalPrice = days * vehicle.pricePerDay;
+  const totalPrice = days > 0 ? calculateTotalPrice(vehicle, startDate, endDate) : 0;
+  const avgPricePerDay = days > 0 ? Math.round(totalPrice / days) : 0;
 
   const handleBooking = () => {
     if (!startDate || !endDate || days < 1) {
@@ -153,8 +154,9 @@ const VehicleDetail = () => {
             <div className="lg:col-span-1">
               <div className="sticky top-24 bg-card border border-border rounded-2xl p-6 space-y-6">
                 <div className="text-center">
+                  <p className="text-sm text-muted-foreground">a partire da</p>
                   <p className="text-3xl font-bold text-foreground">
-                    €{vehicle.pricePerDay}
+                    €{getMinPrice(vehicle)}
                     <span className="text-base font-normal text-muted-foreground">/giorno</span>
                   </p>
                 </div>
@@ -189,7 +191,7 @@ const VehicleDetail = () => {
                 {days > 0 && (
                   <div className="bg-secondary rounded-xl p-4 space-y-2">
                     <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">€{vehicle.pricePerDay} × {days} giorni</span>
+                      <span className="text-muted-foreground">~€{avgPricePerDay} × {days} giorni</span>
                       <span className="text-foreground font-medium">€{totalPrice}</span>
                     </div>
                     <div className="flex justify-between font-bold text-lg border-t border-border pt-2">

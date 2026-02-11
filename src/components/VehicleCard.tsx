@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Users, BedDouble, Ruler, MapPin } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import type { Vehicle } from "@/data/vehicles";
+import { type Vehicle, getMinPrice } from "@/data/vehicles";
 
 interface VehicleCardProps {
   vehicle: Vehicle;
@@ -21,7 +21,8 @@ const VehicleCard = ({ vehicle }: VehicleCardProps) => {
           {vehicle.typeLabel}
         </Badge>
         <div className="absolute top-4 right-4 bg-background/90 backdrop-blur-sm rounded-full px-3 py-1">
-          <span className="font-bold text-foreground">€{vehicle.pricePerDay}</span>
+          <span className="text-muted-foreground text-xs">da </span>
+          <span className="font-bold text-foreground">€{getMinPrice(vehicle)}</span>
           <span className="text-muted-foreground text-xs">/giorno</span>
         </div>
       </div>
