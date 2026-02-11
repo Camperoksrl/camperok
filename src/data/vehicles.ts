@@ -85,7 +85,8 @@ export const vehicles: Vehicle[] = [
     images: [knaus1, knaus2, knaus3, knaus4, knaus5],
     pricePerDay: 119,
     pricingPeriods: [
-      { label: "Bassa Stagione", startDate: "2026-02-27", endDate: "2026-03-27", pricePerDay: 65 },
+      { label: "Bassa Stagione", startDate: "2026-02-27", endDate: "2026-03-08", pricePerDay: 65 },
+      { label: "Media Stagione", startDate: "2026-03-09", endDate: "2026-03-27", pricePerDay: 70 },
     ],
     capacity: 5,
     beds: 6,
@@ -105,7 +106,8 @@ export const vehicles: Vehicle[] = [
     images: [rimor1, rimor2, rimor3, rimor4, rimor5, rimor6, rimor7, rimor8],
     pricePerDay: 99,
     pricingPeriods: [
-      { label: "Bassa Stagione", startDate: "2026-02-27", endDate: "2026-03-27", pricePerDay: 65 },
+      { label: "Bassa Stagione", startDate: "2026-02-27", endDate: "2026-03-08", pricePerDay: 65 },
+      { label: "Media Stagione", startDate: "2026-03-09", endDate: "2026-03-27", pricePerDay: 70 },
     ],
     capacity: 6,
     beds: 6,
@@ -125,7 +127,8 @@ export const vehicles: Vehicle[] = [
     images: [roller1, roller2, roller3, roller4, roller5, roller6, roller7, roller8, roller9],
     pricePerDay: 89,
     pricingPeriods: [
-      { label: "Bassa Stagione", startDate: "2026-02-27", endDate: "2026-03-27", pricePerDay: 65 },
+      { label: "Bassa Stagione", startDate: "2026-02-27", endDate: "2026-03-08", pricePerDay: 65 },
+      { label: "Media Stagione", startDate: "2026-03-09", endDate: "2026-03-27", pricePerDay: 70 },
     ],
     capacity: 6,
     beds: 6,
