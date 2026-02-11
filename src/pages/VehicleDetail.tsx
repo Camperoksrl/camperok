@@ -19,6 +19,7 @@ const VehicleDetail = () => {
 
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [selectedImage, setSelectedImage] = useState(0);
 
   if (!vehicle) {
     return (
@@ -79,13 +80,31 @@ const VehicleDetail = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-8">
+              {/* Main Image */}
               <div className="rounded-2xl overflow-hidden">
                 <img
-                  src={vehicle.image}
+                  src={vehicle.images?.[selectedImage] ?? vehicle.image}
                   alt={vehicle.name}
                   className="w-full h-[400px] md:h-[500px] object-cover"
                 />
               </div>
+
+              {/* Thumbnail Gallery */}
+              {vehicle.images && vehicle.images.length > 1 && (
+                <div className="flex gap-3 overflow-x-auto pb-2">
+                  {vehicle.images.map((img, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setSelectedImage(idx)}
+                      className={`shrink-0 rounded-lg overflow-hidden border-2 transition-all ${
+                        selectedImage === idx ? "border-primary" : "border-transparent opacity-70 hover:opacity-100"
+                      }`}
+                    >
+                      <img src={img} alt={`${vehicle.name} ${idx + 1}`} className="w-20 h-16 object-cover" />
+                    </button>
+                  ))}
+                </div>
+              )}
 
               <div>
                 <div className="flex items-center gap-3 mb-2">

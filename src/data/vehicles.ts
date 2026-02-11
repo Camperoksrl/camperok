@@ -3,6 +3,11 @@ import rvMotorhome from "@/assets/rv-motorhome.jpg";
 import rvCompact from "@/assets/rv-compact.jpg";
 import rvFamily from "@/assets/rv-family.jpg";
 import rvPremium from "@/assets/rv-premium.jpg";
+import knaus1 from "@/assets/knaus-sun-traveller-1.jpg";
+import knaus2 from "@/assets/knaus-sun-traveller-2.jpg";
+import knaus3 from "@/assets/knaus-sun-traveller-3.jpg";
+import knaus4 from "@/assets/knaus-sun-traveller-4.jpg";
+import knaus5 from "@/assets/knaus-sun-traveller-5.jpg";
 
 export interface Vehicle {
   id: string;
@@ -10,6 +15,7 @@ export interface Vehicle {
   type: "van" | "motorhome" | "compact" | "premium";
   typeLabel: string;
   image: string;
+  images?: string[];
   pricePerDay: number;
   capacity: number;
   beds: number;
@@ -99,6 +105,23 @@ export const vehicles: Vehicle[] = [
     features: ["Riscaldamento a pavimento", "Cucina premium", "Bagno luxury", "TV 32\"", "Sistema audio", "Garage XL", "Pannelli solari"],
     description: "Il Carthago Liner è il massimo del lusso su ruote. Rifiniture di pregio, riscaldamento a pavimento, cucina gourmet e bagno spa. Ideale per chi non vuole rinunciare a nulla. Dotato di ogni tecnologia moderna per un'esperienza di viaggio senza pari.",
     shortDescription: "Lusso senza compromessi. L'esperienza premium su ruote.",
+    location: "Milano",
+    available: true,
+  },
+  {
+    id: "knaus-sun-traveller",
+    name: "Knaus Sun Traveller",
+    type: "motorhome",
+    typeLabel: "Motorhome",
+    image: knaus1,
+    images: [knaus1, knaus2, knaus3, knaus4, knaus5],
+    pricePerDay: 119,
+    capacity: 5,
+    beds: 4,
+    length: "6.5m",
+    features: ["Aria condizionata", "Pannello solare", "Doppio serbatoio acqua", "Porta bici/scooter", "Vetri elettrici", "Specchietti elettrici", "Cucina", "Bagno"],
+    description: "Il Knaus Sun Traveller è un camper perfetto per una famiglia con bambini piccoli, molto comodo da guidare, con aria condizionata in cabina, vetri e specchietti elettrici. Ha due serbatoi di acqua e il pannello solare, per un'autonomia maggiore in sosta libera. Completo di porta bici o scooter, sarà un ottimo compagno di viaggio.",
+    shortDescription: "Perfetto per famiglie con bambini. Comodo, autonomo e ben accessoriato.",
     location: "Milano",
     available: true,
   },
