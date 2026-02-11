@@ -28,6 +28,12 @@ export interface PricingPeriod {
   pricePerDay: number;
 }
 
+export interface UnavailablePeriod {
+  startDate: string;
+  endDate: string;
+  reason?: string;
+}
+
 export interface Vehicle {
   id: string;
   name: string;
@@ -37,6 +43,7 @@ export interface Vehicle {
   images?: string[];
   pricePerDay: number;
   pricingPeriods?: PricingPeriod[];
+  unavailablePeriods?: UnavailablePeriod[];
   capacity: number;
   beds: number;
   length: string;
@@ -61,6 +68,27 @@ export const getMinPrice = (vehicle: Vehicle): number => {
   if (!vehicle.pricingPeriods?.length) return vehicle.pricePerDay;
   const prices = [vehicle.pricePerDay, ...vehicle.pricingPeriods.map((p) => p.pricePerDay)];
   return Math.min(...prices);
+};
+
+export const isDateUnavailable = (vehicle: Vehicle, date: Date): boolean => {
+  if (!vehicle.unavailablePeriods?.length) return false;
+  return vehicle.unavailablePeriods.some((p) => {
+    const start = new Date(p.startDate);
+    const end = new Date(p.endDate);
+    return date >= start && date <= end;
+  });
+};
+
+export const hasUnavailableDays = (vehicle: Vehicle, startDate: string, endDate: string): UnavailablePeriod | null => {
+  if (!vehicle.unavailablePeriods?.length) return null;
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  for (const period of vehicle.unavailablePeriods) {
+    const pStart = new Date(period.startDate);
+    const pEnd = new Date(period.endDate);
+    if (start <= pEnd && end >= pStart) return period;
+  }
+  return null;
 };
 
 export const calculateTotalPrice = (vehicle: Vehicle, startDate: string, endDate: string): number => {
@@ -118,6 +146,9 @@ export const vehicles: Vehicle[] = [
       { label: "Natale/Capodanno", startDate: "2026-12-21", endDate: "2027-01-03", pricePerDay: 110 },
       { label: "Bassa Stagione", startDate: "2027-01-04", endDate: "2027-01-31", pricePerDay: 65 },
     ],
+    unavailablePeriods: [
+      { startDate: "2027-02-01", endDate: "2027-02-26", reason: "Manutenzione programmata" },
+    ],
     capacity: 5,
     beds: 6,
     length: "6.5m",
@@ -169,6 +200,9 @@ export const vehicles: Vehicle[] = [
       { label: "Natale/Capodanno", startDate: "2026-12-21", endDate: "2027-01-03", pricePerDay: 110 },
       { label: "Bassa Stagione", startDate: "2027-01-04", endDate: "2027-01-31", pricePerDay: 65 },
     ],
+    unavailablePeriods: [
+      { startDate: "2027-02-01", endDate: "2027-02-26", reason: "Manutenzione programmata" },
+    ],
     capacity: 6,
     beds: 6,
     length: "6.7m",
@@ -219,6 +253,9 @@ export const vehicles: Vehicle[] = [
       { label: "Bassa Stagione", startDate: "2026-12-10", endDate: "2026-12-20", pricePerDay: 65 },
       { label: "Natale/Capodanno", startDate: "2026-12-21", endDate: "2027-01-03", pricePerDay: 110 },
       { label: "Bassa Stagione", startDate: "2027-01-04", endDate: "2027-01-31", pricePerDay: 65 },
+    ],
+    unavailablePeriods: [
+      { startDate: "2027-02-01", endDate: "2027-02-26", reason: "Manutenzione programmata" },
     ],
     capacity: 6,
     beds: 6,

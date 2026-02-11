@@ -2,7 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import { vehicles, getMinPrice, calculateTotalPrice } from "@/data/vehicles";
+import { vehicles, getMinPrice, calculateTotalPrice, hasUnavailableDays } from "@/data/vehicles";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -47,12 +47,21 @@ const VehicleDetail = () => {
   const days = getDayCount();
   const totalPrice = days > 0 ? calculateTotalPrice(vehicle, startDate, endDate) : 0;
   const avgPricePerDay = days > 0 ? Math.round(totalPrice / days) : 0;
+  const unavailablePeriod = startDate && endDate && days > 0 ? hasUnavailableDays(vehicle, startDate, endDate) : null;
 
   const handleBooking = () => {
     if (!startDate || !endDate || days < 1) {
       toast({
         title: "Date non valide",
         description: "Seleziona le date di ritiro e riconsegna.",
+        variant: "destructive",
+      });
+      return;
+    }
+    if (unavailablePeriod) {
+      toast({
+        title: "Periodo non disponibile",
+        description: `Il veicolo non è disponibile dal ${unavailablePeriod.startDate} al ${unavailablePeriod.endDate}${unavailablePeriod.reason ? ` (${unavailablePeriod.reason})` : ""}.`,
         variant: "destructive",
       });
       return;
@@ -200,10 +209,17 @@ const VehicleDetail = () => {
                     </div>
                   </div>
                 )}
+                {unavailablePeriod && (
+                  <div className="bg-destructive/10 border border-destructive/30 rounded-xl p-4 text-sm text-destructive">
+                    <p className="font-medium">⚠️ Veicolo non disponibile</p>
+                    <p>Dal {unavailablePeriod.startDate} al {unavailablePeriod.endDate}{unavailablePeriod.reason ? ` — ${unavailablePeriod.reason}` : ""}</p>
+                  </div>
+                )}
 
                 <Button
                   className="w-full bg-accent text-accent-foreground hover:bg-accent/90 rounded-full text-base py-6"
                   onClick={handleBooking}
+                  disabled={!!unavailablePeriod}
                 >
                   Richiedi Prenotazione
                 </Button>
