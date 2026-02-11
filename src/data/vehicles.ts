@@ -49,7 +49,7 @@ export const vehicles: Vehicle[] = [
     images: [knaus1, knaus2, knaus3, knaus4, knaus5],
     pricePerDay: 119,
     capacity: 5,
-    beds: 4,
+    beds: 6,
     length: "6.5m",
     features: ["Aria condizionata", "Pannello solare", "Doppio serbatoio acqua", "Porta bici/scooter", "Vetri elettrici", "Specchietti elettrici", "Telecamera retromarcia", "Cucina", "Bagno"],
     description: "Il Knaus Sun Traveller è un camper perfetto per una famiglia con bambini piccoli, molto comodo da guidare, con aria condizionata in cabina, vetri e specchietti elettrici. Ha due serbatoi di acqua e il pannello solare, per un'autonomia maggiore in sosta libera. Completo di porta bici o scooter e telecamera per la retromarcia, sarà un ottimo compagno di viaggio.",
