@@ -54,7 +54,7 @@ export const vehicles: Vehicle[] = [
     features: ["Aria condizionata", "Pannello solare", "Doppio serbatoio acqua", "Porta bici/scooter", "Vetri elettrici", "Specchietti elettrici", "Telecamera retromarcia", "Cucina", "Bagno"],
     description: "Il Knaus Sun Traveller è un camper perfetto per una famiglia con bambini piccoli, molto comodo da guidare, con aria condizionata in cabina, vetri e specchietti elettrici. Ha due serbatoi di acqua e il pannello solare, per un'autonomia maggiore in sosta libera. Completo di porta bici o scooter e telecamera per la retromarcia, sarà un ottimo compagno di viaggio.",
     shortDescription: "Perfetto per famiglie con bambini. Comodo, autonomo e ben accessoriato.",
-    location: "Milano",
+    location: "Roma",
     available: true,
   },
   {
@@ -71,7 +71,7 @@ export const vehicles: Vehicle[] = [
     features: ["Aria condizionata", "Pannello solare", "Doppio serbatoio acqua", "Porta bici", "Telecamera retromarcia", "Cucina", "Bagno con doccia", "Letti a castello", "Letto mansarda", "Dinette"],
     description: "Il Rimor Europeo NG6 è un camper 6 posti molto spazioso. È provvisto di aria condizionata in cabina, doppio serbatoio di acqua, porta bici, telecamera per la retromarcia e pannello solare. Comodo da guidare e spazioso per tutta la famiglia, saprà condurti ovunque in piena sicurezza.",
     shortDescription: "6 posti, spazioso e sicuro. Ideale per tutta la famiglia.",
-    location: "Milano",
+    location: "Roma",
     available: true,
   },
   {
@@ -88,7 +88,7 @@ export const vehicles: Vehicle[] = [
     features: ["Aria condizionata", "Pannello solare", "Porta bici", "Garage posteriore", "Telecamera retromarcia", "Cucina", "Letti a castello", "Letto mansarda", "Dinette"],
     description: "Il Roller Team Autoroller 2 ha l'aria condizionata in cabina, il pannello solare, 6 posti letto e il portabici. Un ampio garage in coda ti aiuterà a stivare tutto quello che vuoi portare con te in vacanza. È lungo 6,8 metri ed è provvisto di telecamera di retromarcia.",
     shortDescription: "6 posti con garage posteriore, pannello solare e telecamera.",
-    location: "Milano",
+    location: "Roma",
     available: true,
   },
 ];
