@@ -2,110 +2,99 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Minimal Architecture Design System - Black & White Excellence */
+/* CamperViaggio - Italian RV Rental Design System */
 
 @layer base {
   :root {
-    /* Pure Architecture Palette */
-    --background: 0 0% 100%;
-    --foreground: 0 0% 0%;
+    /* Warm earth & adventure palette */
+    --background: 40 33% 98%;
+    --foreground: 220 20% 15%;
     
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 0%;
+    --card: 40 30% 99%;
+    --card-foreground: 220 20% 15%;
     
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 0%;
+    --popover: 40 30% 99%;
+    --popover-foreground: 220 20% 15%;
     
-    /* Primary: Pure Black */
-    --primary: 0 0% 0%;
-    --primary-foreground: 0 0% 100%;
+    /* Primary: Deep forest green */
+    --primary: 160 45% 28%;
+    --primary-foreground: 40 33% 98%;
     
-    /* Secondary: Pure White */
-    --secondary: 0 0% 100%;
-    --secondary-foreground: 0 0% 0%;
+    /* Secondary: Warm sand */
+    --secondary: 35 40% 92%;
+    --secondary-foreground: 220 20% 15%;
     
-    /* Muted: Subtle Gray */
-    --muted: 0 0% 96%;
-    --muted-foreground: 0 0% 20%;
+    /* Muted: Soft warm gray */
+    --muted: 35 20% 94%;
+    --muted-foreground: 220 10% 40%;
     
-    /* Accent: Elegant Gray */
-    --accent: 0 0% 95%;
-    --accent-foreground: 0 0% 0%;
+    /* Accent: Sunset orange */
+    --accent: 24 80% 55%;
+    --accent-foreground: 40 33% 98%;
     
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
     
-    --border: 0 0% 90%;
-    --input: 0 0% 95%;
-    --ring: 0 0% 0%;
+    --border: 35 20% 88%;
+    --input: 35 20% 92%;
+    --ring: 160 45% 28%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-background: 40 30% 97%;
+    --sidebar-foreground: 220 20% 15%;
+    --sidebar-primary: 160 45% 28%;
+    --sidebar-primary-foreground: 40 33% 98%;
+    --sidebar-accent: 35 40% 92%;
+    --sidebar-accent-foreground: 220 20% 15%;
+    --sidebar-border: 35 20% 88%;
+    --sidebar-ring: 160 45% 28%;
     
-    /* Architecture Gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(0 0% 0% / 0.8), hsl(0 0% 0% / 0.4));
-    --gradient-overlay: linear-gradient(180deg, hsl(0 0% 0% / 0.9), hsl(0 0% 0% / 0.1));
+    /* Adventure Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(220 20% 15% / 0.7), hsl(160 45% 28% / 0.3));
+    --gradient-overlay: linear-gradient(180deg, hsl(220 20% 15% / 0.6), hsl(220 20% 15% / 0.1));
     
-    /* Elegant Shadows */
-    --shadow-architectural: 0 25px 50px -12px hsl(0 0% 0% / 0.25);
-    --shadow-elegant: 0 10px 30px -10px hsl(0 0% 0% / 0.15);
-    
-    /* Smooth Transitions */
-    --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    --transition-fast: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    /* Warm Shadows */
+    --shadow-warm: 0 25px 50px -12px hsl(35 40% 30% / 0.15);
+    --shadow-soft: 0 10px 30px -10px hsl(35 40% 30% / 0.1);
   }
 
   .dark {
-    --background: 0 0% 0%;
-    --foreground: 0 0% 100%;
+    --background: 220 20% 8%;
+    --foreground: 40 20% 95%;
     
-    --card: 0 0% 5%;
-    --card-foreground: 0 0% 100%;
+    --card: 220 20% 10%;
+    --card-foreground: 40 20% 95%;
     
-    --popover: 0 0% 5%;
-    --popover-foreground: 0 0% 100%;
+    --popover: 220 20% 10%;
+    --popover-foreground: 40 20% 95%;
     
-    --primary: 0 0% 100%;
-    --primary-foreground: 0 0% 0%;
+    --primary: 160 45% 45%;
+    --primary-foreground: 220 20% 8%;
     
-    --secondary: 0 0% 10%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 220 15% 18%;
+    --secondary-foreground: 40 20% 95%;
     
-    --muted: 0 0% 10%;
-    --muted-foreground: 0 0% 60%;
+    --muted: 220 15% 15%;
+    --muted-foreground: 40 10% 60%;
     
-    --accent: 0 0% 15%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 24 80% 55%;
+    --accent-foreground: 220 20% 8%;
     
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
     
-    --border: 0 0% 15%;
-    --input: 0 0% 10%;
-    --ring: 0 0% 100%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --border: 220 15% 20%;
+    --input: 220 15% 15%;
+    --ring: 160 45% 45%;
+    --sidebar-background: 220 20% 10%;
+    --sidebar-foreground: 40 20% 95%;
+    --sidebar-primary: 160 45% 45%;
+    --sidebar-primary-foreground: 220 20% 8%;
+    --sidebar-accent: 220 15% 18%;
+    --sidebar-accent-foreground: 40 20% 95%;
+    --sidebar-border: 220 15% 20%;
+    --sidebar-ring: 160 45% 45%;
   }
 }
 
@@ -115,24 +104,23 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply bg-background text-foreground antialiased;
+    font-family: 'DM Sans', system-ui, sans-serif;
   }
   
-  /* Architectural Typography */
-  .text-architectural {
-    @apply tracking-[-0.02em] leading-[1.1];
+  .text-display {
+    font-family: 'Playfair Display', serif;
+    @apply tracking-tight leading-[1.1];
   }
   
   .text-minimal {
     @apply tracking-wide uppercase text-xs font-medium;
   }
   
-  /* Hero Image Overlay */
   .hero-overlay {
     background: var(--gradient-overlay);
   }
   
-  /* Smooth Reveal Animation */
   .reveal {
     @apply opacity-0 translate-y-8;
     animation: reveal 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
