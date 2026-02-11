@@ -21,6 +21,13 @@ import roller7 from "@/assets/roller-team-autoroller-7.jpg";
 import roller8 from "@/assets/roller-team-autoroller-8.jpg";
 import roller9 from "@/assets/roller-team-autoroller-9.jpg";
 
+export interface PricingPeriod {
+  label: string;
+  startDate: string;
+  endDate: string;
+  pricePerDay: number;
+}
+
 export interface Vehicle {
   id: string;
   name: string;
@@ -29,6 +36,7 @@ export interface Vehicle {
   image: string;
   images?: string[];
   pricePerDay: number;
+  pricingPeriods?: PricingPeriod[];
   capacity: number;
   beds: number;
   length: string;
@@ -39,6 +47,34 @@ export interface Vehicle {
   available: boolean;
 }
 
+export const getPriceForDate = (vehicle: Vehicle, date: Date): number => {
+  if (!vehicle.pricingPeriods?.length) return vehicle.pricePerDay;
+  const period = vehicle.pricingPeriods.find((p) => {
+    const start = new Date(p.startDate);
+    const end = new Date(p.endDate);
+    return date >= start && date <= end;
+  });
+  return period ? period.pricePerDay : vehicle.pricePerDay;
+};
+
+export const getMinPrice = (vehicle: Vehicle): number => {
+  if (!vehicle.pricingPeriods?.length) return vehicle.pricePerDay;
+  const prices = [vehicle.pricePerDay, ...vehicle.pricingPeriods.map((p) => p.pricePerDay)];
+  return Math.min(...prices);
+};
+
+export const calculateTotalPrice = (vehicle: Vehicle, startDate: string, endDate: string): number => {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  let total = 0;
+  const current = new Date(start);
+  while (current < end) {
+    total += getPriceForDate(vehicle, current);
+    current.setDate(current.getDate() + 1);
+  }
+  return total;
+};
+
 export const vehicles: Vehicle[] = [
   {
     id: "knaus-sun-traveller",
@@ -48,6 +84,9 @@ export const vehicles: Vehicle[] = [
     image: knaus1,
     images: [knaus1, knaus2, knaus3, knaus4, knaus5],
     pricePerDay: 119,
+    pricingPeriods: [
+      { label: "Bassa Stagione", startDate: "2026-02-27", endDate: "2026-03-27", pricePerDay: 65 },
+    ],
     capacity: 5,
     beds: 6,
     length: "6.5m",
@@ -65,6 +104,9 @@ export const vehicles: Vehicle[] = [
     image: rimor1,
     images: [rimor1, rimor2, rimor3, rimor4, rimor5, rimor6, rimor7, rimor8],
     pricePerDay: 99,
+    pricingPeriods: [
+      { label: "Bassa Stagione", startDate: "2026-02-27", endDate: "2026-03-27", pricePerDay: 65 },
+    ],
     capacity: 6,
     beds: 6,
     length: "6.7m",
@@ -82,6 +124,9 @@ export const vehicles: Vehicle[] = [
     image: roller1,
     images: [roller1, roller2, roller3, roller4, roller5, roller6, roller7, roller8, roller9],
     pricePerDay: 89,
+    pricingPeriods: [
+      { label: "Bassa Stagione", startDate: "2026-02-27", endDate: "2026-03-27", pricePerDay: 65 },
+    ],
     capacity: 6,
     beds: 6,
     length: "6.8m",
