@@ -85,8 +85,8 @@ export const vehicles: Vehicle[] = [
     images: [knaus1, knaus2, knaus3, knaus4, knaus5],
     pricePerDay: 119,
     pricingPeriods: [
-      { label: "Bassa Stagione", startDate: "2026-02-27", endDate: "2026-03-08", pricePerDay: 65 },
-      { label: "Media Stagione", startDate: "2026-03-09", endDate: "2026-04-09", pricePerDay: 70 },
+      { label: "Bassa Stagione", startDate: "2026-02-27", endDate: "2026-03-26", pricePerDay: 65 },
+      { label: "Media Stagione", startDate: "2026-03-27", endDate: "2026-04-09", pricePerDay: 70 },
       { label: "Weekend Pasqua", startDate: "2026-04-10", endDate: "2026-04-12", pricePerDay: 75 },
       { label: "Media Stagione", startDate: "2026-04-13", endDate: "2026-04-16", pricePerDay: 70 },
       { label: "Weekend Pasqua", startDate: "2026-04-17", endDate: "2026-04-19", pricePerDay: 75 },
@@ -112,8 +112,8 @@ export const vehicles: Vehicle[] = [
     images: [rimor1, rimor2, rimor3, rimor4, rimor5, rimor6, rimor7, rimor8],
     pricePerDay: 99,
     pricingPeriods: [
-      { label: "Bassa Stagione", startDate: "2026-02-27", endDate: "2026-03-08", pricePerDay: 65 },
-      { label: "Media Stagione", startDate: "2026-03-09", endDate: "2026-04-09", pricePerDay: 70 },
+      { label: "Bassa Stagione", startDate: "2026-02-27", endDate: "2026-03-26", pricePerDay: 65 },
+      { label: "Media Stagione", startDate: "2026-03-27", endDate: "2026-04-09", pricePerDay: 70 },
       { label: "Weekend Pasqua", startDate: "2026-04-10", endDate: "2026-04-12", pricePerDay: 75 },
       { label: "Media Stagione", startDate: "2026-04-13", endDate: "2026-04-16", pricePerDay: 70 },
       { label: "Weekend Pasqua", startDate: "2026-04-17", endDate: "2026-04-19", pricePerDay: 75 },
@@ -139,8 +139,8 @@ export const vehicles: Vehicle[] = [
     images: [roller1, roller2, roller3, roller4, roller5, roller6, roller7, roller8, roller9],
     pricePerDay: 89,
     pricingPeriods: [
-      { label: "Bassa Stagione", startDate: "2026-02-27", endDate: "2026-03-08", pricePerDay: 65 },
-      { label: "Media Stagione", startDate: "2026-03-09", endDate: "2026-04-09", pricePerDay: 70 },
+      { label: "Bassa Stagione", startDate: "2026-02-27", endDate: "2026-03-26", pricePerDay: 65 },
+      { label: "Media Stagione", startDate: "2026-03-27", endDate: "2026-04-09", pricePerDay: 70 },
       { label: "Weekend Pasqua", startDate: "2026-04-10", endDate: "2026-04-12", pricePerDay: 75 },
       { label: "Media Stagione", startDate: "2026-04-13", endDate: "2026-04-16", pricePerDay: 70 },
       { label: "Weekend Pasqua", startDate: "2026-04-17", endDate: "2026-04-19", pricePerDay: 75 },
