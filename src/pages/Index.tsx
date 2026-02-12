@@ -37,7 +37,7 @@ const Index = () => {
                 </Button>
               </Link>
               <Link to="/come-funziona">
-                <Button size="lg" variant="outline" className="rounded-full px-8 text-base border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10">
+                <Button size="lg" className="rounded-full px-8 text-base bg-primary-foreground text-primary hover:bg-primary-foreground/90">
                   Come Funziona
                 </Button>
               </Link>
