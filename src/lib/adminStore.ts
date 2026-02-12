@@ -91,6 +91,14 @@ export const getBookings = async (): Promise<Booking[]> => {
 export const addBooking = async (booking: Omit<Booking, "id" | "created_at" | "status">): Promise<{ success: true } | { error: string }> => {
   const { error } = await supabase.from("bookings").insert({ ...booking, status: "pending" });
   if (error) return { error: error.message };
+
+  // Fire-and-forget email notification
+  supabase.functions.invoke("notify-booking", {
+    body: booking,
+  }).catch((err) => {
+    if (import.meta.env.DEV) console.error("Notification error:", err);
+  });
+
   return { success: true };
 };
 
