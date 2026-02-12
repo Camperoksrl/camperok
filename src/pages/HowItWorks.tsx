@@ -27,7 +27,7 @@ const steps = [
     icon: Key,
     number: "03",
     title: "Ritira il Veicolo",
-    description: "Vieni a ritirare il camper presso la sede più vicina. Ti forniremo un briefing completo sul veicolo.",
+    description: "Vieni a ritirare il camper presso il rimessaggio in zona Ardeatina, a Roma. Ti forniremo un briefing completo sul veicolo.",
   },
   {
     icon: Compass,
