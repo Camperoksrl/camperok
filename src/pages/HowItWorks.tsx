@@ -44,7 +44,7 @@ const faqs = [
   },
   {
     question: "L'assicurazione è inclusa nel prezzo?",
-    answer: "Sì, tutti i nostri noleggi includono assicurazione RCA, kasko con franchigia e assistenza stradale 24/7. Puoi aggiungere la copertura franchigia zero a un costo aggiuntivo.",
+    answer: "Sì, tutti i nostri noleggi includono assicurazione RCA, kasko con franchigia e assistenza stradale 24/7.",
   },
   {
     question: "Qual è l'età minima per noleggiare?",
