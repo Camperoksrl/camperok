@@ -14,7 +14,7 @@ const PrivacyPolicy = () => {
             <section className="space-y-3">
               <h2 className="text-2xl font-semibold text-foreground">1. Titolare del Trattamento</h2>
               <p className="text-muted-foreground leading-relaxed">
-                Il Titolare del trattamento dei dati personali è <strong className="text-foreground">Camperok S.r.l.</strong>, con sede legale in Milano, Italia.
+                Il Titolare del trattamento dei dati personali è <strong className="text-foreground">Camperok S.r.l.</strong>, con sede legale in Via Ardeatina 802, Roma, Italia.
                 Per qualsiasi richiesta relativa alla privacy è possibile contattarci all'indirizzo e-mail: <a href="mailto:privacy@camperok.it" className="text-primary hover:underline">privacy@camperok.it</a>.
               </p>
             </section>
