@@ -47,8 +47,8 @@ const Contatti = () => {
               <h2 className="text-2xl font-bold text-foreground text-display">Dove Trovarci</h2>
               <div className="space-y-6">
                 {[
-                  { icon: MapPin, title: "Indirizzo", text: "Via Roma 123, 20121 Milano (MI)" },
-                  { icon: Phone, title: "Telefono", text: "+39 02 1234 5678" },
+                  { icon: MapPin, title: "Indirizzo", text: "Via Ardeatina 802, Roma" },
+                  { icon: Phone, title: "Telefono", text: "339-2715067" },
                   { icon: Mail, title: "Email", text: "info@camperok.it" },
                   { icon: Clock, title: "Orari", text: "Lun-Sab: 8:00-19:00 | Dom: 9:00-13:00" },
                 ].map((item) => (
