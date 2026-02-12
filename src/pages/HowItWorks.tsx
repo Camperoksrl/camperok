@@ -40,7 +40,7 @@ const steps = [
 const faqs = [
   {
     question: "Che patente serve per guidare un camper?",
-    answer: "Per i nostri veicoli fino a 3.5 tonnellate è sufficiente la patente B. Per i motorhome più grandi potrebbe servire la patente C. Verifica i requisiti nella scheda di ogni veicolo.",
+    answer: "Per i nostri veicoli fino a 3.5 tonnellate è sufficiente la patente B.",
   },
   {
     question: "L'assicurazione è inclusa nel prezzo?",
