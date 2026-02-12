@@ -30,9 +30,9 @@ const Contact = () => {
                 <div>
                   <h4 className="text-minimal text-muted-foreground mb-2">STUDIO</h4>
                   <address className="text-xl not-italic">
-                    123 Design Avenue
+                    Via Ardeatina 802
                     <br />
-                    New York, NY 10001
+                    Roma, Italia
                   </address>
                 </div>
               </div>
