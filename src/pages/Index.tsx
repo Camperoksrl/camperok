@@ -26,7 +26,7 @@ const Index = () => {
             <h1 className="text-5xl md:text-7xl font-bold text-primary-foreground text-display mb-6">
               La tua avventura su ruote inizia qui
             </h1>
-            <p className="text-lg text-primary-foreground/80 mb-8 leading-relaxed">
+            <p className="text-lg text-[#FFFDD0] mb-8 leading-relaxed">
               Scopri l'Italia a bordo dei nostri camper. Dalle Dolomiti alla Sicilia, ogni strada diventa un'esperienza indimenticabile.
             </p>
             <div className="flex flex-wrap gap-4">
