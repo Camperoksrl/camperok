@@ -9,7 +9,7 @@ const Footer = () => {
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <Truck className="h-6 w-6" />
-              <span className="text-xl font-bold text-display">CamperViaggio</span>
+              <span className="text-xl font-bold text-display">Camperok</span>
             </div>
             <p className="text-background/60 text-sm leading-relaxed">
               La tua avventura su ruote inizia qui. Noleggia il camper perfetto per esplorare l'Italia.
@@ -44,7 +44,7 @@ const Footer = () => {
               </div>
               <div className="flex items-center gap-2 text-background/60 text-sm">
                 <Mail className="h-4 w-4" />
-                <span>info@camperviaggio.it</span>
+                <span>info@camperok.it</span>
               </div>
               <div className="flex items-center gap-2 text-background/60 text-sm">
                 <MapPin className="h-4 w-4" />
@@ -55,7 +55,7 @@ const Footer = () => {
         </div>
 
         <div className="border-t border-background/10 mt-12 pt-8 text-center text-background/40 text-sm">
-          © {new Date().getFullYear()} CamperViaggio. Tutti i diritti riservati.
+          © {new Date().getFullYear()} Camperok. Tutti i diritti riservati.
         </div>
       </div>
     </footer>
