@@ -48,7 +48,7 @@ const faqs = [
   },
   {
     question: "Qual è l'età minima per noleggiare?",
-    answer: "L'età minima è 21 anni con almeno 2 anni di patente. Per i veicoli Premium, l'età minima è 25 anni.",
+    answer: "L'età minima è 26 anni con almeno 2 anni di patente.",
   },
   {
     question: "Posso viaggiare all'estero?",
