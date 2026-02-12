@@ -14,16 +14,116 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      bookings: {
+        Row: {
+          camper_id: string
+          created_at: string
+          customer_email: string
+          customer_name: string
+          end_date: string
+          id: string
+          start_date: string
+          status: string
+          total_price: number
+        }
+        Insert: {
+          camper_id: string
+          created_at?: string
+          customer_email: string
+          customer_name: string
+          end_date: string
+          id?: string
+          start_date: string
+          status?: string
+          total_price?: number
+        }
+        Update: {
+          camper_id?: string
+          created_at?: string
+          customer_email?: string
+          customer_name?: string
+          end_date?: string
+          id?: string
+          start_date?: string
+          status?: string
+          total_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookings_camper_id_fkey"
+            columns: ["camper_id"]
+            isOneToOne: false
+            referencedRelation: "campers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      campers: {
+        Row: {
+          created_at: string
+          daily_price: number
+          deposit: number
+          description: string
+          high_season_price: number
+          id: string
+          name: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          daily_price?: number
+          deposit?: number
+          description?: string
+          high_season_price?: number
+          id?: string
+          name: string
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          daily_price?: number
+          deposit?: number
+          description?: string
+          high_season_price?: number
+          id?: string
+          name?: string
+          status?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +250,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+    },
   },
 } as const
