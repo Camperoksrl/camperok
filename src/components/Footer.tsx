@@ -7,7 +7,7 @@ const Footer = () => {
   return (
     <footer className="bg-foreground text-background py-16">
       <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <img src={logoCamperok} alt="Camperok" className="h-10 w-10 rounded-full" />
@@ -38,15 +38,6 @@ const Footer = () => {
             </div>
           </div>
 
-          <div className="space-y-4">
-            <h4 className="font-semibold text-sm uppercase tracking-wider">Veicoli</h4>
-            <div className="space-y-2">
-              <Link to="/veicoli?type=van" className="block text-background/60 hover:text-background text-sm transition-colors">Van</Link>
-              <Link to="/veicoli?type=motorhome" className="block text-background/60 hover:text-background text-sm transition-colors">Motorhome</Link>
-              <Link to="/veicoli?type=compact" className="block text-background/60 hover:text-background text-sm transition-colors">Compatti</Link>
-              <Link to="/veicoli?type=premium" className="block text-background/60 hover:text-background text-sm transition-colors">Premium</Link>
-            </div>
-          </div>
 
           <div className="space-y-4">
             <h4 className="font-semibold text-sm uppercase tracking-wider">Contatti</h4>
