@@ -15,8 +15,8 @@ const Contact = () => {
               <div className="space-y-8">
                 <div>
                   <h4 className="text-minimal text-muted-foreground mb-2">EMAIL</h4>
-                  <a href="mailto:hello@archstudio.com" className="text-xl hover:text-muted-foreground transition-colors duration-300">
-                    hello@archstudio.com
+                  <a href="mailto:camperokroma@gmail.com" className="text-xl hover:text-muted-foreground transition-colors duration-300">
+                    camperokroma@gmail.com
                   </a>
                 </div>
                 

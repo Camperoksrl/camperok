@@ -49,7 +49,7 @@ const Contatti = () => {
                 {[
                   { icon: MapPin, title: "Indirizzo", text: "Via Ardeatina 802, Roma" },
                   { icon: Phone, title: "Telefono", text: "339-2715067" },
-                  { icon: Mail, title: "Email", text: "info@camperok.it" },
+                  { icon: Mail, title: "Email", text: "camperokroma@gmail.com" },
                   { icon: Clock, title: "Orari", text: "Lun-Sab: 8:00-19:00 | Dom: 9:00-13:00" },
                 ].map((item) => (
                   <div key={item.title} className="flex items-start gap-4">
