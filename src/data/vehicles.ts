@@ -35,6 +35,7 @@ export interface UnavailablePeriod {
 }
 
 export interface Vehicle {
+  dbId?: string; // UUID in database
   id: string;
   name: string;
   type: "van" | "motorhome" | "compact" | "premium";
@@ -106,6 +107,7 @@ export const calculateTotalPrice = (vehicle: Vehicle, startDate: string, endDate
 export const vehicles: Vehicle[] = [
   {
     id: "knaus-sun-traveller",
+    dbId: "0f50c778-9dd4-4f17-882f-a4bd81dd8e6d",
     name: "Knaus Sun Traveller",
     type: "motorhome",
     typeLabel: "Camper mansardato",
@@ -160,6 +162,7 @@ export const vehicles: Vehicle[] = [
   },
   {
     id: "rimor-europeo-ng6",
+    dbId: "9d0ac81c-180c-4d61-b993-bbc68e3c8d75",
     name: "Rimor Europeo NG6",
     type: "motorhome",
     typeLabel: "Camper mansardato",
@@ -214,6 +217,7 @@ export const vehicles: Vehicle[] = [
   },
   {
     id: "roller-team-autoroller-2",
+    dbId: "be582811-d62c-4483-a9b3-70ab8e6e2fcf",
     name: "Roller Team Autoroller 2",
     type: "motorhome",
     typeLabel: "Camper mansardato",
