@@ -22,7 +22,7 @@ const Navigation = () => {
       <div className="container mx-auto px-6 py-4 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
           <Truck className="h-6 w-6 text-primary" />
-          <span className="text-xl font-bold text-foreground text-display">CamperViaggio</span>
+          <span className="text-xl font-bold text-foreground text-display">Camperok</span>
         </Link>
         
         <div className="hidden md:flex items-center space-x-10">

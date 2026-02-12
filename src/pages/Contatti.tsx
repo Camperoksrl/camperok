@@ -49,7 +49,7 @@ const Contatti = () => {
                 {[
                   { icon: MapPin, title: "Indirizzo", text: "Via Roma 123, 20121 Milano (MI)" },
                   { icon: Phone, title: "Telefono", text: "+39 02 1234 5678" },
-                  { icon: Mail, title: "Email", text: "info@camperviaggio.it" },
+                  { icon: Mail, title: "Email", text: "info@camperok.it" },
                   { icon: Clock, title: "Orari", text: "Lun-Sab: 8:00-19:00 | Dom: 9:00-13:00" },
                 ].map((item) => (
                   <div key={item.title} className="flex items-start gap-4">
