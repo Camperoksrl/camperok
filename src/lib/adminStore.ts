@@ -56,6 +56,7 @@ export const getCampers = async (): Promise<Camper[]> => {
   const { data, error } = await supabase.from("campers").select("*").order("created_at");
   if (error) { if (import.meta.env.DEV) console.error("getCampers error:", error); return []; }
   return data as Camper[];
+};
 
 export const getCamper = async (id: string): Promise<Camper | null> => {
   const { data, error } = await supabase.from("campers").select("*").eq("id", id).single();
