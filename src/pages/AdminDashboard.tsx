@@ -11,7 +11,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
-import { LogOut, Plus, Pencil, Trash2, Truck, CalendarDays, ClipboardList, Home } from "lucide-react";
+import { LogOut, Plus, Pencil, Trash2, Truck, CalendarDays, ClipboardList, Home, Calendar } from "lucide-react";
+import BookingCalendar from "@/components/BookingCalendar";
 
 const statusColors: Record<Booking["status"], string> = {
   pending: "bg-yellow-100 text-yellow-800 border-yellow-300",
@@ -123,6 +124,7 @@ const AdminDashboard = () => {
         <Tabs defaultValue="bookings">
           <TabsList>
             <TabsTrigger value="bookings"><ClipboardList className="h-4 w-4 mr-1" /> Prenotazioni</TabsTrigger>
+            <TabsTrigger value="calendar"><Calendar className="h-4 w-4 mr-1" /> Calendario</TabsTrigger>
             <TabsTrigger value="campers"><Truck className="h-4 w-4 mr-1" /> Camper</TabsTrigger>
           </TabsList>
 
@@ -216,6 +218,11 @@ const AdminDashboard = () => {
                 </Table>
               </div>
             )}
+          </TabsContent>
+
+          {/* Calendar Tab */}
+          <TabsContent value="calendar">
+            <BookingCalendar campers={campers} bookings={bookings} />
           </TabsContent>
 
           {/* Campers Tab */}
