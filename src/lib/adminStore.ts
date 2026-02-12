@@ -88,10 +88,10 @@ export const getBookings = async (): Promise<Booking[]> => {
   return data as Booking[];
 };
 
-export const addBooking = async (booking: Omit<Booking, "id" | "created_at" | "status">): Promise<Booking | { error: string }> => {
-  const { data, error } = await supabase.from("bookings").insert({ ...booking, status: "pending" }).select().single();
+export const addBooking = async (booking: Omit<Booking, "id" | "created_at" | "status">): Promise<{ success: true } | { error: string }> => {
+  const { error } = await supabase.from("bookings").insert({ ...booking, status: "pending" });
   if (error) return { error: error.message };
-  return data as Booking;
+  return { success: true };
 };
 
 export const updateBookingStatus = async (id: string, status: Booking["status"]): Promise<Booking | null> => {
