@@ -1,12 +1,13 @@
 import { Link } from "react-router-dom";
 import { Mail, Phone, MapPin } from "lucide-react";
 import logoCamperok from "@/assets/logo-camperok.png";
+import { reopenCookieBanner } from "@/components/CookieBanner";
 
 const Footer = () => {
   return (
     <footer className="bg-foreground text-background py-16">
       <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <img src={logoCamperok} alt="Camperok" className="h-10 w-10 rounded-full" />
@@ -23,6 +24,17 @@ const Footer = () => {
               <Link to="/veicoli" className="block text-background/60 hover:text-background text-sm transition-colors">Veicoli</Link>
               <Link to="/come-funziona" className="block text-background/60 hover:text-background text-sm transition-colors">Come Funziona</Link>
               <Link to="/contatti" className="block text-background/60 hover:text-background text-sm transition-colors">Contatti</Link>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <h4 className="font-semibold text-sm uppercase tracking-wider">Legale</h4>
+            <div className="space-y-2">
+              <Link to="/privacy-policy" className="block text-background/60 hover:text-background text-sm transition-colors">Privacy Policy</Link>
+              <Link to="/cookie-policy" className="block text-background/60 hover:text-background text-sm transition-colors">Cookie Policy</Link>
+              <button onClick={reopenCookieBanner} className="block text-background/60 hover:text-background text-sm transition-colors text-left">
+                Gestisci Cookie
+              </button>
             </div>
           </div>
 
