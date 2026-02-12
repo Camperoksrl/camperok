@@ -54,9 +54,8 @@ export const getCurrentUserId = async (): Promise<string | null> => {
 // --- Campers CRUD ---
 export const getCampers = async (): Promise<Camper[]> => {
   const { data, error } = await supabase.from("campers").select("*").order("created_at");
-  if (error) { console.error("getCampers error:", error); return []; }
+  if (error) { if (import.meta.env.DEV) console.error("getCampers error:", error); return []; }
   return data as Camper[];
-};
 
 export const getCamper = async (id: string): Promise<Camper | null> => {
   const { data, error } = await supabase.from("campers").select("*").eq("id", id).single();
@@ -66,13 +65,13 @@ export const getCamper = async (id: string): Promise<Camper | null> => {
 
 export const addCamper = async (camper: Omit<Camper, "id" | "created_at">): Promise<Camper | null> => {
   const { data, error } = await supabase.from("campers").insert(camper).select().single();
-  if (error) { console.error("addCamper error:", error); return null; }
+  if (error) { if (import.meta.env.DEV) console.error("addCamper error:", error); return null; }
   return data as Camper;
 };
 
 export const updateCamper = async (id: string, updates: Partial<Omit<Camper, "id" | "created_at">>): Promise<Camper | null> => {
   const { data, error } = await supabase.from("campers").update(updates).eq("id", id).select().single();
-  if (error) { console.error("updateCamper error:", error); return null; }
+  if (error) { if (import.meta.env.DEV) console.error("updateCamper error:", error); return null; }
   return data as Camper;
 };
 
@@ -84,7 +83,7 @@ export const deleteCamper = async (id: string): Promise<boolean> => {
 // --- Bookings CRUD ---
 export const getBookings = async (): Promise<Booking[]> => {
   const { data, error } = await supabase.from("bookings").select("*").order("start_date", { ascending: true });
-  if (error) { console.error("getBookings error:", error); return []; }
+  if (error) { if (import.meta.env.DEV) console.error("getBookings error:", error); return []; }
   return data as Booking[];
 };
 
@@ -96,7 +95,7 @@ export const addBooking = async (booking: Omit<Booking, "id" | "created_at" | "s
 
 export const updateBookingStatus = async (id: string, status: Booking["status"]): Promise<Booking | null> => {
   const { data, error } = await supabase.from("bookings").update({ status }).eq("id", id).select().single();
-  if (error) { console.error("updateBookingStatus error:", error); return null; }
+  if (error) { if (import.meta.env.DEV) console.error("updateBookingStatus error:", error); return null; }
   return data as Booking;
 };
 
