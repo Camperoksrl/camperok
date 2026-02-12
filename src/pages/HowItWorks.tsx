@@ -60,7 +60,7 @@ const faqs = [
   },
   {
     question: "Cosa succede in caso di guasto?",
-    answer: "Hai a disposizione la nostra assistenza 24/7. In caso di guasto, ti invieremo un mezzo sostitutivo o ti assisteremo nella riparazione nel minor tempo possibile.",
+    answer: "Hai a disposizione l'assistenza fornita dalle nostre compagnie assicurative, attiva 24/7.",
   },
 ];
 
