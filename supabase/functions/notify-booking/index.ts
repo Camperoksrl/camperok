@@ -78,7 +78,7 @@ serve(async (req) => {
         Authorization: `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: "CamperOK <onboarding@resend.dev>",
+        from: "CamperOK <noreply@camperok.it>",
         to: [NOTIFY_EMAIL],
         subject: `Nuova Prenotazione: ${customer_name} (${start_date} → ${end_date})`,
         html: emailHtml,
