@@ -91,7 +91,7 @@ const VehicleDetail = () => {
     setIsSubmitting(true);
     try {
       const result = await addBooking({
-        camper_id: vehicle.id,
+        camper_id: vehicle.dbId || vehicle.id,
         customer_name: customerName.trim().slice(0, 200),
         customer_email: customerEmail.trim().slice(0, 255).toLowerCase(),
         start_date: startDate,
