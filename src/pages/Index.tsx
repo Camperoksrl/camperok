@@ -49,11 +49,10 @@ const Index = () => {
       {/* Value Props */}
       <section className="py-20 bg-secondary">
         <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               { icon: Shield, title: "Assicurazione Inclusa", desc: "Copertura completa per viaggiare sereni" },
               { icon: Clock, title: "Prenotazione Facile", desc: "Prenota online in pochi minuti" },
-              { icon: MapPin, title: "Ritiro Flessibile", desc: "Diverse sedi in tutta Italia" },
               { icon: Headphones, title: "Assistenza 24/7", desc: "Sempre al tuo fianco, ovunque tu sia" },
             ].map((item) => (
               <div key={item.title} className="text-center space-y-3">
