@@ -33,7 +33,7 @@ const steps = [
     icon: Compass,
     number: "04",
     title: "Parti all'Avventura",
-    description: "Goditi il viaggio! Con assistenza 24/7 e assicurazione completa, puoi concentrarti solo sul divertimento.",
+    description: "Goditi il viaggio! Con assistenza e assicurazione completi, puoi concentrarti solo sul divertimento.",
   },
 ];
 
