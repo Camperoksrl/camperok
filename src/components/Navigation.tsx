@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { Menu, X, Truck } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import logoCamperok from "@/assets/logo-camperok.png";
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -21,7 +22,7 @@ const Navigation = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border">
       <div className="container mx-auto px-6 py-4 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2">
-          <Truck className="h-6 w-6 text-primary" />
+          <img src={logoCamperok} alt="Camperok" className="h-10 w-10 rounded-full" />
           <span className="text-xl font-bold text-foreground text-display">Camperok</span>
         </Link>
         
