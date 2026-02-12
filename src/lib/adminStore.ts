@@ -83,7 +83,7 @@ export const deleteCamper = async (id: string): Promise<boolean> => {
 
 // --- Bookings CRUD ---
 export const getBookings = async (): Promise<Booking[]> => {
-  const { data, error } = await supabase.from("bookings").select("*").order("created_at", { ascending: false });
+  const { data, error } = await supabase.from("bookings").select("*").order("start_date", { ascending: true });
   if (error) { console.error("getBookings error:", error); return []; }
   return data as Booking[];
 };
