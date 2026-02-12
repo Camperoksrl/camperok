@@ -56,7 +56,7 @@ const faqs = [
   },
   {
     question: "Come funziona la riconsegna?",
-    answer: "Il veicolo deve essere riconsegnato con il serbatoio pieno e pulito internamente. La riconsegna avviene presso la stessa sede di ritiro, salvo accordi diversi.",
+    answer: "Il veicolo deve essere riconsegnato con il serbatoio pieno e pulito internamente. La riconsegna avviene presso la stessa sede di ritiro.",
   },
   {
     question: "Cosa succede in caso di guasto?",
