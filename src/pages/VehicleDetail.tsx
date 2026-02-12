@@ -3,6 +3,7 @@ import { useState } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { vehicles, getMinPrice, calculateTotalPrice, hasUnavailableDays } from "@/data/vehicles";
+import { addBooking } from "@/lib/adminStore";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -19,6 +20,9 @@ const VehicleDetail = () => {
 
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [customerName, setCustomerName] = useState("");
+  const [customerEmail, setCustomerEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedImage, setSelectedImage] = useState(0);
 
   if (!vehicle) {
@@ -49,7 +53,24 @@ const VehicleDetail = () => {
   const avgPricePerDay = days > 0 ? Math.round(totalPrice / days) : 0;
   const unavailablePeriod = startDate && endDate && days > 0 ? hasUnavailableDays(vehicle, startDate, endDate) : null;
 
-  const handleBooking = () => {
+  const handleBooking = async () => {
+    if (!customerName.trim() || !customerEmail.trim()) {
+      toast({
+        title: "Dati mancanti",
+        description: "Inserisci nome e email per procedere.",
+        variant: "destructive",
+      });
+      return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(customerEmail.trim())) {
+      toast({
+        title: "Email non valida",
+        description: "Inserisci un indirizzo email valido.",
+        variant: "destructive",
+      });
+      return;
+    }
     if (!startDate || !endDate || days < 1) {
       toast({
         title: "Date non valide",
@@ -66,10 +87,43 @@ const VehicleDetail = () => {
       });
       return;
     }
-    toast({
-      title: "Richiesta Inviata! ✅",
-      description: `Prenotazione per ${vehicle.name} dal ${startDate} al ${endDate} (${days} giorni, €${totalPrice}). Ti contatteremo a breve.`,
-    });
+
+    setIsSubmitting(true);
+    try {
+      const result = await addBooking({
+        camper_id: vehicle.id,
+        customer_name: customerName.trim().slice(0, 200),
+        customer_email: customerEmail.trim().slice(0, 255).toLowerCase(),
+        start_date: startDate,
+        end_date: endDate,
+        total_price: totalPrice,
+      });
+
+      if ("error" in result) {
+        toast({
+          title: "Errore",
+          description: "Non è stato possibile inviare la prenotazione. Riprova.",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Richiesta Inviata! ✅",
+          description: `Prenotazione per ${vehicle.name} dal ${startDate} al ${endDate} (${days} giorni, €${totalPrice}). Ti contatteremo a breve.`,
+        });
+        setCustomerName("");
+        setCustomerEmail("");
+        setStartDate("");
+        setEndDate("");
+      }
+    } catch {
+      toast({
+        title: "Errore",
+        description: "Si è verificato un errore. Riprova più tardi.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -172,6 +226,28 @@ const VehicleDetail = () => {
 
                 <div className="space-y-4">
                   <div>
+                    <Label className="text-sm font-medium text-foreground">Nome e Cognome</Label>
+                    <Input
+                      type="text"
+                      placeholder="Mario Rossi"
+                      className="mt-1 rounded-xl"
+                      value={customerName}
+                      onChange={(e) => setCustomerName(e.target.value)}
+                      maxLength={200}
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-sm font-medium text-foreground">Email</Label>
+                    <Input
+                      type="email"
+                      placeholder="mario@esempio.it"
+                      className="mt-1 rounded-xl"
+                      value={customerEmail}
+                      onChange={(e) => setCustomerEmail(e.target.value)}
+                      maxLength={255}
+                    />
+                  </div>
+                  <div>
                     <Label className="text-sm font-medium text-foreground">Data Ritiro</Label>
                     <div className="relative mt-1">
                       <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -219,9 +295,9 @@ const VehicleDetail = () => {
                 <Button
                   className="w-full bg-accent text-accent-foreground hover:bg-accent/90 rounded-full text-base py-6"
                   onClick={handleBooking}
-                  disabled={!!unavailablePeriod}
+                  disabled={!!unavailablePeriod || isSubmitting}
                 >
-                  Richiedi Prenotazione
+                  {isSubmitting ? "Invio in corso..." : "Richiedi Prenotazione"}
                 </Button>
 
                 <p className="text-xs text-muted-foreground text-center">
