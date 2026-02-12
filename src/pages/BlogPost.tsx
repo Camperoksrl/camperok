@@ -1,4 +1,5 @@
 import { useParams, Link } from "react-router-dom";
+import DOMPurify from "dompurify";
 import Navigation from "@/components/Navigation";
 import { blogPosts } from "@/data/blogPosts";
 
@@ -79,29 +80,32 @@ const BlogPost = () => {
               <div 
                 className="text-muted-foreground leading-relaxed space-y-6"
                 dangerouslySetInnerHTML={{ 
-                  __html: post.content
-                    .split('\n')
-                    .map(line => {
-                      if (line.startsWith('# ')) {
-                        return `<h1 class="text-3xl md:text-4xl font-light text-architectural mb-8 mt-12">${line.substring(2)}</h1>`;
-                      } else if (line.startsWith('## ')) {
-                        return `<h2 class="text-2xl md:text-3xl font-light text-architectural mb-6 mt-10">${line.substring(3)}</h2>`;
-                      } else if (line.startsWith('### ')) {
-                        return `<h3 class="text-xl md:text-2xl font-medium text-foreground mb-4 mt-8">${line.substring(4)}</h3>`;
-                      } else if (line.startsWith('- **') && line.endsWith('**')) {
-                        const content = line.substring(4, line.length - 2);
-                        return `<li class="ml-6 mb-2"><strong class="text-foreground">${content}</strong></li>`;
-                      } else if (line.startsWith('- ')) {
-                        return `<li class="ml-6 mb-2">${line.substring(2)}</li>`;
-                      } else if (line.trim() === '') {
-                        return '<br>';
-                      } else if (line.startsWith('**') && line.endsWith('**')) {
-                        return `<p class="mb-4"><strong class="text-foreground">${line.substring(2, line.length - 2)}</strong></p>`;
-                      } else {
-                        return `<p class="mb-4">${line}</p>`;
-                      }
-                    })
-                    .join('')
+                  __html: DOMPurify.sanitize(
+                    post.content
+                      .split('\n')
+                      .map(line => {
+                        if (line.startsWith('# ')) {
+                          return `<h1 class="text-3xl md:text-4xl font-light text-architectural mb-8 mt-12">${line.substring(2)}</h1>`;
+                        } else if (line.startsWith('## ')) {
+                          return `<h2 class="text-2xl md:text-3xl font-light text-architectural mb-6 mt-10">${line.substring(3)}</h2>`;
+                        } else if (line.startsWith('### ')) {
+                          return `<h3 class="text-xl md:text-2xl font-medium text-foreground mb-4 mt-8">${line.substring(4)}</h3>`;
+                        } else if (line.startsWith('- **') && line.endsWith('**')) {
+                          const content = line.substring(4, line.length - 2);
+                          return `<li class="ml-6 mb-2"><strong class="text-foreground">${content}</strong></li>`;
+                        } else if (line.startsWith('- ')) {
+                          return `<li class="ml-6 mb-2">${line.substring(2)}</li>`;
+                        } else if (line.trim() === '') {
+                          return '<br>';
+                        } else if (line.startsWith('**') && line.endsWith('**')) {
+                          return `<p class="mb-4"><strong class="text-foreground">${line.substring(2, line.length - 2)}</strong></p>`;
+                        } else {
+                          return `<p class="mb-4">${line}</p>`;
+                        }
+                      })
+                      .join(''),
+                    { ADD_ATTR: ['class'] }
+                  )
                 }}
               />
             </div>
