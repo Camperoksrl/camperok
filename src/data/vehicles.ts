@@ -149,7 +149,7 @@ export const vehicles: Vehicle[] = [
     unavailablePeriods: [
       { startDate: "2027-02-01", endDate: "2027-02-26", reason: "Manutenzione programmata" },
     ],
-    capacity: 5,
+    capacity: 6,
     beds: 6,
     length: "6.5m",
     features: ["Aria condizionata", "Pannello solare", "Doppio serbatoio acqua", "Porta bici/scooter", "Vetri elettrici", "Specchietti elettrici", "Telecamera retromarcia", "Cucina", "Bagno"],
