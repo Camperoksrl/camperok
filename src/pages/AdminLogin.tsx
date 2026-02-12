@@ -11,15 +11,20 @@ const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (adminLogin(email, password)) {
+    setLoading(true);
+    setError("");
+    const success = await adminLogin(email, password);
+    if (success) {
       navigate("/admin");
     } else {
       setError("Credenziali non valide.");
     }
+    setLoading(false);
   };
 
   return (
@@ -43,8 +48,9 @@ const AdminLogin = () => {
               <Input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" required />
             </div>
             {error && <p className="text-sm text-destructive">{error}</p>}
-            <Button type="submit" className="w-full">Accedi</Button>
-            <p className="text-xs text-muted-foreground text-center">Demo: admin@camperok.it / admin123</p>
+            <Button type="submit" className="w-full" disabled={loading}>
+              {loading ? "Accesso in corso..." : "Accedi"}
+            </Button>
           </form>
         </CardContent>
       </Card>

@@ -3,7 +3,6 @@ import { type Booking, type Camper } from "@/lib/adminStore";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
@@ -15,13 +14,13 @@ interface Props {
 const MONTHS_IT = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
 const DAYS_IT = ["Lun", "Mar", "Mer", "Gio", "Ven", "Sab", "Dom"];
 
-const statusColorMap: Record<Booking["status"], string> = {
+const statusColorMap: Record<string, string> = {
   pending: "bg-yellow-400/80",
   confirmed: "bg-green-500/80",
   cancelled: "bg-red-400/50",
 };
 
-const statusLabel: Record<Booking["status"], string> = {
+const statusLabel: Record<string, string> = {
   pending: "In Attesa",
   confirmed: "Confermata",
   cancelled: "Annullata",
@@ -35,30 +34,28 @@ const BookingCalendar = ({ campers, bookings }: Props) => {
 
   const filteredBookings = useMemo(() => {
     const active = bookings.filter(b => b.status !== "cancelled");
-    return selectedCamper === "all" ? active : active.filter(b => b.camperId === selectedCamper);
+    return selectedCamper === "all" ? active : active.filter(b => b.camper_id === selectedCamper);
   }, [bookings, selectedCamper]);
 
-  // Build a map: dateKey -> { camperId, booking }[]
   const dateMap = useMemo(() => {
     const map = new Map<string, { camperId: string; booking: Booking }[]>();
     for (const b of filteredBookings) {
-      const start = new Date(b.startDate);
-      const end = new Date(b.endDate);
+      const start = new Date(b.start_date);
+      const end = new Date(b.end_date);
       const current = new Date(start);
       while (current <= end) {
         const key = current.toISOString().slice(0, 10);
         if (!map.has(key)) map.set(key, []);
-        map.get(key)!.push({ camperId: b.camperId, booking: b });
+        map.get(key)!.push({ camperId: b.camper_id, booking: b });
         current.setDate(current.getDate() + 1);
       }
     }
     return map;
   }, [filteredBookings]);
 
-  // Calendar grid
   const firstDay = new Date(year, month, 1);
   const lastDay = new Date(year, month + 1, 0);
-  const startDow = (firstDay.getDay() + 6) % 7; // Monday = 0
+  const startDow = (firstDay.getDay() + 6) % 7;
   const totalDays = lastDay.getDate();
 
   const cells: (number | null)[] = [];
@@ -93,14 +90,12 @@ const BookingCalendar = ({ campers, bookings }: Props) => {
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
-        {/* Month navigation */}
         <div className="flex items-center justify-between">
           <Button variant="ghost" size="icon" onClick={prevMonth}><ChevronLeft className="h-5 w-5" /></Button>
           <h3 className="text-lg font-semibold text-foreground">{MONTHS_IT[month]} {year}</h3>
           <Button variant="ghost" size="icon" onClick={nextMonth}><ChevronRight className="h-5 w-5" /></Button>
         </div>
 
-        {/* Grid */}
         <div className="grid grid-cols-7 gap-px bg-border rounded-xl overflow-hidden">
           {DAYS_IT.map(d => (
             <div key={d} className="bg-muted/30 py-2 text-center text-xs font-medium text-muted-foreground">{d}</div>
@@ -121,14 +116,14 @@ const BookingCalendar = ({ campers, bookings }: Props) => {
                       <Tooltip key={`${e.booking.id}-${idx}`}>
                         <TooltipTrigger asChild>
                           <div className={`${statusColorMap[e.booking.status]} rounded px-1 py-0.5 text-[10px] leading-tight text-foreground truncate cursor-default`}>
-                            {selectedCamper === "all" ? camperName.split(" ")[0] : e.booking.customerName.split(" ")[0]}
+                            {selectedCamper === "all" ? camperName.split(" ")[0] : e.booking.customer_name.split(" ")[0]}
                           </div>
                         </TooltipTrigger>
                         <TooltipContent side="top" className="max-w-[200px]">
                           <p className="font-medium">{camperName}</p>
-                          <p className="text-xs">{e.booking.customerName}</p>
-                          <p className="text-xs">{e.booking.startDate} → {e.booking.endDate}</p>
-                          <p className="text-xs">€{e.booking.totalPrice} · {statusLabel[e.booking.status]}</p>
+                          <p className="text-xs">{e.booking.customer_name}</p>
+                          <p className="text-xs">{e.booking.start_date} → {e.booking.end_date}</p>
+                          <p className="text-xs">€{e.booking.total_price} · {statusLabel[e.booking.status]}</p>
                         </TooltipContent>
                       </Tooltip>
                     );
@@ -142,9 +137,8 @@ const BookingCalendar = ({ campers, bookings }: Props) => {
           })}
         </div>
 
-        {/* Legend */}
         <div className="flex flex-wrap gap-4 pt-2">
-          {(["confirmed", "pending", "cancelled"] as Booking["status"][]).map(s => (
+          {(["confirmed", "pending", "cancelled"] as string[]).map(s => (
             <div key={s} className="flex items-center gap-1.5">
               <div className={`w-3 h-3 rounded ${statusColorMap[s]}`} />
               <span className="text-xs text-muted-foreground">{statusLabel[s]}</span>

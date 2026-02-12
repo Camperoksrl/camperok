@@ -1,155 +1,126 @@
-// localStorage-based backend simulation for camper rental admin
+// Supabase-backed admin store for camper rental management
+import { supabase } from "@/integrations/supabase/client";
 
 export interface Camper {
   id: string;
   name: string;
   description: string;
-  dailyPrice: number;
-  highSeasonPrice: number;
+  daily_price: number;
+  high_season_price: number;
   deposit: number;
   status: "active" | "inactive";
-  createdAt: string;
+  created_at: string;
 }
 
 export interface Booking {
   id: string;
-  camperId: string;
-  customerName: string;
-  customerEmail: string;
-  startDate: string;
-  endDate: string;
-  totalPrice: number;
+  camper_id: string;
+  customer_name: string;
+  customer_email: string;
+  start_date: string;
+  end_date: string;
+  total_price: number;
   status: "pending" | "confirmed" | "cancelled";
-  createdAt: string;
+  created_at: string;
 }
 
-const CAMPERS_KEY = "camperok_campers";
-const BOOKINGS_KEY = "camperok_bookings";
-const AUTH_KEY = "camperok_admin_auth";
-
-// Default admin credentials
-const ADMIN_EMAIL = "admin@camperok.it";
-const ADMIN_PASSWORD = "admin123";
-
 // --- Auth ---
-export const adminLogin = (email: string, password: string): boolean => {
-  if (email === ADMIN_EMAIL && password === ADMIN_PASSWORD) {
-    localStorage.setItem(AUTH_KEY, JSON.stringify({ email, loggedIn: true, loginAt: new Date().toISOString() }));
-    return true;
-  }
-  return false;
+export const adminLogin = async (email: string, password: string): Promise<boolean> => {
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  return !error;
 };
 
-export const adminLogout = () => localStorage.removeItem(AUTH_KEY);
+export const adminLogout = async () => {
+  await supabase.auth.signOut();
+};
 
-export const isAdminLoggedIn = (): boolean => {
-  const data = localStorage.getItem(AUTH_KEY);
-  return data ? JSON.parse(data).loggedIn === true : false;
+export const isAdminLoggedIn = async (): Promise<boolean> => {
+  const { data } = await supabase.auth.getSession();
+  if (!data.session) return false;
+  // Check admin role
+  const { data: roles } = await supabase
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", data.session.user.id)
+    .eq("role", "admin");
+  return !!(roles && roles.length > 0);
+};
+
+export const getCurrentUserId = async (): Promise<string | null> => {
+  const { data } = await supabase.auth.getSession();
+  return data.session?.user.id ?? null;
 };
 
 // --- Campers CRUD ---
-const getStoredCampers = (): Camper[] => {
-  const data = localStorage.getItem(CAMPERS_KEY);
-  if (data) return JSON.parse(data);
-  // Seed from existing vehicles
-  const seed: Camper[] = [
-    { id: "knaus-sun-traveller", name: "Knaus Sun Traveller", description: "Camper mansardato 6 posti", dailyPrice: 119, highSeasonPrice: 110, deposit: 1500, status: "active", createdAt: "2026-01-01T00:00:00Z" },
-    { id: "rimor-europeo-ng6", name: "Rimor Europeo NG6", description: "Camper mansardato 6 posti spazioso", dailyPrice: 99, highSeasonPrice: 110, deposit: 1500, status: "active", createdAt: "2026-01-01T00:00:00Z" },
-    { id: "roller-team-autoroller-2", name: "Roller Team Autoroller 2", description: "Camper mansardato con garage", dailyPrice: 89, highSeasonPrice: 110, deposit: 1500, status: "active", createdAt: "2026-01-01T00:00:00Z" },
-  ];
-  localStorage.setItem(CAMPERS_KEY, JSON.stringify(seed));
-  return seed;
+export const getCampers = async (): Promise<Camper[]> => {
+  const { data, error } = await supabase.from("campers").select("*").order("created_at");
+  if (error) { console.error("getCampers error:", error); return []; }
+  return data as Camper[];
 };
 
-export const getCampers = (): Camper[] => getStoredCampers();
-
-export const getCamper = (id: string): Camper | undefined => getStoredCampers().find(c => c.id === id);
-
-export const addCamper = (camper: Omit<Camper, "id" | "createdAt">): Camper => {
-  const campers = getStoredCampers();
-  const newCamper: Camper = {
-    ...camper,
-    id: crypto.randomUUID(),
-    createdAt: new Date().toISOString(),
-  };
-  campers.push(newCamper);
-  localStorage.setItem(CAMPERS_KEY, JSON.stringify(campers));
-  return newCamper;
+export const getCamper = async (id: string): Promise<Camper | null> => {
+  const { data, error } = await supabase.from("campers").select("*").eq("id", id).single();
+  if (error) return null;
+  return data as Camper;
 };
 
-export const updateCamper = (id: string, updates: Partial<Omit<Camper, "id" | "createdAt">>): Camper | null => {
-  const campers = getStoredCampers();
-  const idx = campers.findIndex(c => c.id === id);
-  if (idx === -1) return null;
-  campers[idx] = { ...campers[idx], ...updates };
-  localStorage.setItem(CAMPERS_KEY, JSON.stringify(campers));
-  return campers[idx];
+export const addCamper = async (camper: Omit<Camper, "id" | "created_at">): Promise<Camper | null> => {
+  const { data, error } = await supabase.from("campers").insert(camper).select().single();
+  if (error) { console.error("addCamper error:", error); return null; }
+  return data as Camper;
 };
 
-export const deleteCamper = (id: string): boolean => {
-  const campers = getStoredCampers();
-  const filtered = campers.filter(c => c.id !== id);
-  if (filtered.length === campers.length) return false;
-  localStorage.setItem(CAMPERS_KEY, JSON.stringify(filtered));
-  return true;
+export const updateCamper = async (id: string, updates: Partial<Omit<Camper, "id" | "created_at">>): Promise<Camper | null> => {
+  const { data, error } = await supabase.from("campers").update(updates).eq("id", id).select().single();
+  if (error) { console.error("updateCamper error:", error); return null; }
+  return data as Camper;
+};
+
+export const deleteCamper = async (id: string): Promise<boolean> => {
+  const { error } = await supabase.from("campers").delete().eq("id", id);
+  return !error;
 };
 
 // --- Bookings CRUD ---
-const getStoredBookings = (): Booking[] => {
-  const data = localStorage.getItem(BOOKINGS_KEY);
-  return data ? JSON.parse(data) : [];
+export const getBookings = async (): Promise<Booking[]> => {
+  const { data, error } = await supabase.from("bookings").select("*").order("created_at", { ascending: false });
+  if (error) { console.error("getBookings error:", error); return []; }
+  return data as Booking[];
 };
 
-export const getBookings = (): Booking[] => getStoredBookings();
-
-export const addBooking = (booking: Omit<Booking, "id" | "createdAt" | "status">): Booking | { error: string } => {
-  const bookings = getStoredBookings();
-  // Check for conflicts
-  const conflict = bookings.find(b =>
-    b.camperId === booking.camperId &&
-    b.status !== "cancelled" &&
-    new Date(booking.startDate) <= new Date(b.endDate) &&
-    new Date(booking.endDate) >= new Date(b.startDate)
-  );
-  if (conflict) return { error: "Date già prenotate per questo camper." };
-
-  const newBooking: Booking = {
-    ...booking,
-    id: crypto.randomUUID(),
-    status: "pending",
-    createdAt: new Date().toISOString(),
-  };
-  bookings.push(newBooking);
-  localStorage.setItem(BOOKINGS_KEY, JSON.stringify(bookings));
-  return newBooking;
+export const addBooking = async (booking: Omit<Booking, "id" | "created_at" | "status">): Promise<Booking | { error: string }> => {
+  const { data, error } = await supabase.from("bookings").insert({ ...booking, status: "pending" }).select().single();
+  if (error) return { error: error.message };
+  return data as Booking;
 };
 
-export const updateBookingStatus = (id: string, status: Booking["status"]): Booking | null => {
-  const bookings = getStoredBookings();
-  const idx = bookings.findIndex(b => b.id === id);
-  if (idx === -1) return null;
-  bookings[idx].status = status;
-  localStorage.setItem(BOOKINGS_KEY, JSON.stringify(bookings));
-  return bookings[idx];
+export const updateBookingStatus = async (id: string, status: Booking["status"]): Promise<Booking | null> => {
+  const { data, error } = await supabase.from("bookings").update({ status }).eq("id", id).select().single();
+  if (error) { console.error("updateBookingStatus error:", error); return null; }
+  return data as Booking;
 };
 
-export const deleteBooking = (id: string): boolean => {
-  const bookings = getStoredBookings();
-  const filtered = bookings.filter(b => b.id !== id);
-  if (filtered.length === bookings.length) return false;
-  localStorage.setItem(BOOKINGS_KEY, JSON.stringify(filtered));
-  return true;
+export const deleteBooking = async (id: string): Promise<boolean> => {
+  const { error } = await supabase.from("bookings").delete().eq("id", id);
+  return !error;
 };
 
-export const getBookingsForCamper = (camperId: string): Booking[] =>
-  getStoredBookings().filter(b => b.camperId === camperId && b.status !== "cancelled");
+export const getBookingsForCamper = async (camperId: string): Promise<Booking[]> => {
+  const { data, error } = await supabase
+    .from("bookings")
+    .select("*")
+    .eq("camper_id", camperId)
+    .neq("status", "cancelled");
+  if (error) return [];
+  return data as Booking[];
+};
 
-export const getBookedDatesForCamper = (camperId: string): Date[] => {
-  const bookings = getBookingsForCamper(camperId);
+export const getBookedDatesForCamper = async (camperId: string): Promise<Date[]> => {
+  const bookings = await getBookingsForCamper(camperId);
   const dates: Date[] = [];
   for (const b of bookings) {
-    const current = new Date(b.startDate);
-    const end = new Date(b.endDate);
+    const current = new Date(b.start_date);
+    const end = new Date(b.end_date);
     while (current <= end) {
       dates.push(new Date(current));
       current.setDate(current.getDate() + 1);

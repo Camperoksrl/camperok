@@ -1,6 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { isAdminLoggedIn, adminLogout, getCampers, getBookings, updateBookingStatus, deleteBooking, deleteCamper, addCamper, updateCamper, addBooking, type Camper, type Booking } from "@/lib/adminStore";
+import {
+  isAdminLoggedIn, adminLogout, getCampers, getBookings,
+  updateBookingStatus, deleteBooking, deleteCamper, addCamper,
+  updateCamper, addBooking, type Camper, type Booking,
+} from "@/lib/adminStore";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,12 +18,12 @@ import { useToast } from "@/hooks/use-toast";
 import { LogOut, Plus, Pencil, Trash2, Truck, CalendarDays, ClipboardList, Home, Calendar } from "lucide-react";
 import BookingCalendar from "@/components/BookingCalendar";
 
-const statusColors: Record<Booking["status"], string> = {
+const statusColors: Record<string, string> = {
   pending: "bg-yellow-100 text-yellow-800 border-yellow-300",
   confirmed: "bg-green-100 text-green-800 border-green-300",
   cancelled: "bg-red-100 text-red-800 border-red-300",
 };
-const statusLabels: Record<Booking["status"], string> = {
+const statusLabels: Record<string, string> = {
   pending: "In Attesa",
   confirmed: "Confermata",
   cancelled: "Annullata",
@@ -28,6 +32,7 @@ const statusLabels: Record<Booking["status"], string> = {
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [loading, setLoading] = useState(true);
   const [campers, setCampers] = useState<Camper[]>([]);
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [filterStatus, setFilterStatus] = useState<string>("all");
@@ -36,43 +41,50 @@ const AdminDashboard = () => {
   const [editingCamper, setEditingCamper] = useState<Camper | null>(null);
   const [bookingDialogOpen, setBookingDialogOpen] = useState(false);
 
-  // Camper form state
-  const [camperForm, setCamperForm] = useState({ name: "", description: "", dailyPrice: 0, highSeasonPrice: 0, deposit: 0, status: "active" as Camper["status"] });
-  // Booking form state
-  const [bookingForm, setBookingForm] = useState({ camperId: "", customerName: "", customerEmail: "", startDate: "", endDate: "", totalPrice: 0 });
+  const [camperForm, setCamperForm] = useState({ name: "", description: "", daily_price: 0, high_season_price: 0, deposit: 0, status: "active" as Camper["status"] });
+  const [bookingForm, setBookingForm] = useState({ camper_id: "", customer_name: "", customer_email: "", start_date: "", end_date: "", total_price: 0 });
+
+  const refresh = useCallback(async () => {
+    const [c, b] = await Promise.all([getCampers(), getBookings()]);
+    setCampers(c);
+    setBookings(b);
+  }, []);
 
   useEffect(() => {
-    if (!isAdminLoggedIn()) { navigate("/admin/login"); return; }
-    refresh();
-  }, [navigate]);
+    const checkAuth = async () => {
+      const loggedIn = await isAdminLoggedIn();
+      if (!loggedIn) { navigate("/admin/login"); return; }
+      await refresh();
+      setLoading(false);
+    };
+    checkAuth();
+  }, [navigate, refresh]);
 
-  const refresh = () => { setCampers(getCampers()); setBookings(getBookings()); };
-
-  const handleLogout = () => { adminLogout(); navigate("/admin/login"); };
+  const handleLogout = async () => { await adminLogout(); navigate("/admin/login"); };
 
   // Camper actions
-  const openNewCamper = () => { setEditingCamper(null); setCamperForm({ name: "", description: "", dailyPrice: 0, highSeasonPrice: 0, deposit: 0, status: "active" }); setCamperDialogOpen(true); };
-  const openEditCamper = (c: Camper) => { setEditingCamper(c); setCamperForm({ name: c.name, description: c.description, dailyPrice: c.dailyPrice, highSeasonPrice: c.highSeasonPrice, deposit: c.deposit, status: c.status }); setCamperDialogOpen(true); };
-  const saveCamper = () => {
-    if (editingCamper) { updateCamper(editingCamper.id, camperForm); toast({ title: "Camper aggiornato" }); }
-    else { addCamper(camperForm); toast({ title: "Camper aggiunto" }); }
-    setCamperDialogOpen(false); refresh();
+  const openNewCamper = () => { setEditingCamper(null); setCamperForm({ name: "", description: "", daily_price: 0, high_season_price: 0, deposit: 0, status: "active" }); setCamperDialogOpen(true); };
+  const openEditCamper = (c: Camper) => { setEditingCamper(c); setCamperForm({ name: c.name, description: c.description, daily_price: c.daily_price, high_season_price: c.high_season_price, deposit: c.deposit, status: c.status }); setCamperDialogOpen(true); };
+  const saveCamper = async () => {
+    if (editingCamper) { await updateCamper(editingCamper.id, camperForm); toast({ title: "Camper aggiornato" }); }
+    else { await addCamper(camperForm); toast({ title: "Camper aggiunto" }); }
+    setCamperDialogOpen(false); await refresh();
   };
-  const handleDeleteCamper = (id: string) => { deleteCamper(id); toast({ title: "Camper eliminato" }); refresh(); };
+  const handleDeleteCamper = async (id: string) => { await deleteCamper(id); toast({ title: "Camper eliminato" }); await refresh(); };
 
   // Booking actions
-  const handleStatusChange = (id: string, status: Booking["status"]) => { updateBookingStatus(id, status); toast({ title: `Prenotazione ${statusLabels[status].toLowerCase()}` }); refresh(); };
-  const handleDeleteBooking = (id: string) => { deleteBooking(id); toast({ title: "Prenotazione eliminata" }); refresh(); };
-  const openNewBooking = () => { setBookingForm({ camperId: campers[0]?.id || "", customerName: "", customerEmail: "", startDate: "", endDate: "", totalPrice: 0 }); setBookingDialogOpen(true); };
-  const saveBooking = () => {
-    const result = addBooking(bookingForm);
+  const handleStatusChange = async (id: string, status: Booking["status"]) => { await updateBookingStatus(id, status); toast({ title: `Prenotazione ${statusLabels[status]?.toLowerCase()}` }); await refresh(); };
+  const handleDeleteBooking = async (id: string) => { await deleteBooking(id); toast({ title: "Prenotazione eliminata" }); await refresh(); };
+  const openNewBooking = () => { setBookingForm({ camper_id: campers[0]?.id || "", customer_name: "", customer_email: "", start_date: "", end_date: "", total_price: 0 }); setBookingDialogOpen(true); };
+  const saveBooking = async () => {
+    const result = await addBooking(bookingForm);
     if ("error" in result) { toast({ title: "Errore", description: result.error, variant: "destructive" }); return; }
-    toast({ title: "Prenotazione creata" }); setBookingDialogOpen(false); refresh();
+    toast({ title: "Prenotazione creata" }); setBookingDialogOpen(false); await refresh();
   };
 
   const filteredBookings = bookings.filter(b => {
     if (filterStatus !== "all" && b.status !== filterStatus) return false;
-    if (filterCamper !== "all" && b.camperId !== filterCamper) return false;
+    if (filterCamper !== "all" && b.camper_id !== filterCamper) return false;
     return true;
   });
 
@@ -80,17 +92,16 @@ const AdminDashboard = () => {
     total: bookings.length,
     pending: bookings.filter(b => b.status === "pending").length,
     confirmed: bookings.filter(b => b.status === "confirmed").length,
-    revenue: bookings.filter(b => b.status === "confirmed").reduce((s, b) => s + b.totalPrice, 0),
+    revenue: bookings.filter(b => b.status === "confirmed").reduce((s, b) => s + b.total_price, 0),
   };
+
+  if (loading) return <div className="min-h-screen bg-background flex items-center justify-center"><p className="text-muted-foreground">Caricamento...</p></div>;
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
       <header className="border-b border-border bg-card sticky top-0 z-50">
         <div className="container mx-auto px-6 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <h1 className="text-xl font-bold text-foreground">🚐 CamperOK Admin</h1>
-          </div>
+          <h1 className="text-xl font-bold text-foreground">🚐 CamperOK Admin</h1>
           <div className="flex items-center gap-2">
             <Link to="/"><Button variant="ghost" size="sm"><Home className="h-4 w-4 mr-1" /> Sito</Button></Link>
             <Button variant="ghost" size="sm" onClick={handleLogout}><LogOut className="h-4 w-4 mr-1" /> Esci</Button>
@@ -148,24 +159,24 @@ const AdminDashboard = () => {
                 </SelectContent>
               </Select>
               <Dialog open={bookingDialogOpen} onOpenChange={setBookingDialogOpen}>
-                <DialogTrigger asChild><Button size="sm"><Plus className="h-4 w-4 mr-1" /> Nuova</Button></DialogTrigger>
+                <DialogTrigger asChild><Button size="sm" onClick={openNewBooking}><Plus className="h-4 w-4 mr-1" /> Nuova</Button></DialogTrigger>
                 <DialogContent>
                   <DialogHeader><DialogTitle>Nuova Prenotazione</DialogTitle></DialogHeader>
                   <div className="space-y-3">
                     <div>
                       <Label>Camper</Label>
-                      <Select value={bookingForm.camperId} onValueChange={v => setBookingForm(p => ({ ...p, camperId: v }))}>
+                      <Select value={bookingForm.camper_id} onValueChange={v => setBookingForm(p => ({ ...p, camper_id: v }))}>
                         <SelectTrigger><SelectValue /></SelectTrigger>
                         <SelectContent>{campers.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
                       </Select>
                     </div>
-                    <div><Label>Nome Cliente</Label><Input value={bookingForm.customerName} onChange={e => setBookingForm(p => ({ ...p, customerName: e.target.value }))} /></div>
-                    <div><Label>Email Cliente</Label><Input type="email" value={bookingForm.customerEmail} onChange={e => setBookingForm(p => ({ ...p, customerEmail: e.target.value }))} /></div>
+                    <div><Label>Nome Cliente</Label><Input value={bookingForm.customer_name} onChange={e => setBookingForm(p => ({ ...p, customer_name: e.target.value }))} /></div>
+                    <div><Label>Email Cliente</Label><Input type="email" value={bookingForm.customer_email} onChange={e => setBookingForm(p => ({ ...p, customer_email: e.target.value }))} /></div>
                     <div className="grid grid-cols-2 gap-3">
-                      <div><Label>Check-in</Label><Input type="date" value={bookingForm.startDate} onChange={e => setBookingForm(p => ({ ...p, startDate: e.target.value }))} /></div>
-                      <div><Label>Check-out</Label><Input type="date" value={bookingForm.endDate} onChange={e => setBookingForm(p => ({ ...p, endDate: e.target.value }))} /></div>
+                      <div><Label>Check-in</Label><Input type="date" value={bookingForm.start_date} onChange={e => setBookingForm(p => ({ ...p, start_date: e.target.value }))} /></div>
+                      <div><Label>Check-out</Label><Input type="date" value={bookingForm.end_date} onChange={e => setBookingForm(p => ({ ...p, end_date: e.target.value }))} /></div>
                     </div>
-                    <div><Label>Prezzo Totale (€)</Label><Input type="number" value={bookingForm.totalPrice} onChange={e => setBookingForm(p => ({ ...p, totalPrice: Number(e.target.value) }))} /></div>
+                    <div><Label>Prezzo Totale (€)</Label><Input type="number" value={bookingForm.total_price} onChange={e => setBookingForm(p => ({ ...p, total_price: Number(e.target.value) }))} /></div>
                     <Button onClick={saveBooking} className="w-full">Salva Prenotazione</Button>
                   </div>
                 </DialogContent>
@@ -189,15 +200,15 @@ const AdminDashboard = () => {
                   </TableHeader>
                   <TableBody>
                     {filteredBookings.map(b => {
-                      const camperName = campers.find(c => c.id === b.camperId)?.name || b.camperId;
+                      const camperName = campers.find(c => c.id === b.camper_id)?.name || b.camper_id;
                       return (
                         <TableRow key={b.id}>
                           <TableCell>
-                            <div><p className="font-medium text-foreground">{b.customerName}</p><p className="text-xs text-muted-foreground">{b.customerEmail}</p></div>
+                            <div><p className="font-medium text-foreground">{b.customer_name}</p><p className="text-xs text-muted-foreground">{b.customer_email}</p></div>
                           </TableCell>
                           <TableCell className="text-foreground">{camperName}</TableCell>
-                          <TableCell className="text-foreground text-sm">{b.startDate} → {b.endDate}</TableCell>
-                          <TableCell className="font-medium text-foreground">€{b.totalPrice}</TableCell>
+                          <TableCell className="text-foreground text-sm">{b.start_date} → {b.end_date}</TableCell>
+                          <TableCell className="font-medium text-foreground">€{b.total_price}</TableCell>
                           <TableCell>
                             <Select value={b.status} onValueChange={(v) => handleStatusChange(b.id, v as Booking["status"])}>
                               <SelectTrigger className={`w-[130px] text-xs border ${statusColors[b.status]}`}><SelectValue /></SelectTrigger>
@@ -236,8 +247,8 @@ const AdminDashboard = () => {
                     <div><Label>Nome</Label><Input value={camperForm.name} onChange={e => setCamperForm(p => ({ ...p, name: e.target.value }))} /></div>
                     <div><Label>Descrizione</Label><Input value={camperForm.description} onChange={e => setCamperForm(p => ({ ...p, description: e.target.value }))} /></div>
                     <div className="grid grid-cols-3 gap-3">
-                      <div><Label>Prezzo/giorno (€)</Label><Input type="number" value={camperForm.dailyPrice} onChange={e => setCamperForm(p => ({ ...p, dailyPrice: Number(e.target.value) }))} /></div>
-                      <div><Label>Alta Stagione (€)</Label><Input type="number" value={camperForm.highSeasonPrice} onChange={e => setCamperForm(p => ({ ...p, highSeasonPrice: Number(e.target.value) }))} /></div>
+                      <div><Label>Prezzo/giorno (€)</Label><Input type="number" value={camperForm.daily_price} onChange={e => setCamperForm(p => ({ ...p, daily_price: Number(e.target.value) }))} /></div>
+                      <div><Label>Alta Stagione (€)</Label><Input type="number" value={camperForm.high_season_price} onChange={e => setCamperForm(p => ({ ...p, high_season_price: Number(e.target.value) }))} /></div>
                       <div><Label>Deposito (€)</Label><Input type="number" value={camperForm.deposit} onChange={e => setCamperForm(p => ({ ...p, deposit: Number(e.target.value) }))} /></div>
                     </div>
                     <div>
@@ -268,8 +279,8 @@ const AdminDashboard = () => {
                   <CardContent className="space-y-2">
                     <p className="text-sm text-muted-foreground">{c.description}</p>
                     <div className="flex gap-4 text-sm">
-                      <span className="text-foreground font-medium">€{c.dailyPrice}/g</span>
-                      <span className="text-muted-foreground">Alta: €{c.highSeasonPrice}</span>
+                      <span className="text-foreground font-medium">€{c.daily_price}/g</span>
+                      <span className="text-muted-foreground">Alta: €{c.high_season_price}</span>
                       <span className="text-muted-foreground">Dep: €{c.deposit}</span>
                     </div>
                     <div className="flex gap-2 pt-2">
