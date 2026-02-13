@@ -27,7 +27,7 @@ const Index = () => {
               La tua avventura su ruote inizia qui
             </h1>
             <p className="text-lg text-[#FFFDD0] mb-8 leading-relaxed">
-              Scopri l'Italia a bordo dei nostri camper. Dalle Dolomiti alla Sicilia, ogni strada diventa un'esperienza indimenticabile.
+              Scopri l'Italia e l'Europa a bordo dei nostri camper. Dalle Dolomiti alla Sicilia, ogni strada diventa un'esperienza indimenticabile.
             </p>
             <div className="flex flex-wrap gap-4">
               <Link to="/veicoli">
