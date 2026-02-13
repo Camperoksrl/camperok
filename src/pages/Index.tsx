@@ -97,23 +97,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Testimonial */}
-      <section className="py-24 bg-primary text-primary-foreground">
-        <div className="container mx-auto px-6 text-center max-w-3xl">
-          <div className="flex justify-center gap-1 mb-6">
-            {[...Array(5)].map((_, i) => (
-              <Star key={i} className="h-6 w-6 fill-accent text-accent" />
-            ))}
-          </div>
-          <blockquote className="text-2xl md:text-3xl text-display font-medium leading-relaxed mb-8">
-            "Esperienza fantastica! Il camper era perfetto e ci ha permesso di scoprire angoli meravigliosi della Toscana che non avremmo mai visto altrimenti."
-          </blockquote>
-          <div>
-            <p className="font-semibold">Marco e Giulia R.</p>
-            <p className="text-primary-foreground/60 text-sm">Viaggio in Toscana, Agosto 2025</p>
-          </div>
-        </div>
-      </section>
+
 
       {/* CTA */}
       <section className="py-24">
