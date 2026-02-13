@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -24,7 +25,6 @@ serve(async (req) => {
 
   try {
     const payload = await req.json();
-    // Support both direct call and webhook trigger format
     const booking = payload.record || payload;
 
     const {
@@ -35,6 +35,37 @@ serve(async (req) => {
       total_price,
       camper_id,
     } = booking;
+
+    // Validate required fields
+    if (!customer_name || !customer_email || !start_date || !end_date || !camper_id) {
+      return new Response(JSON.stringify({ error: "Missing required booking fields" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Verify booking exists in database to prevent spam
+    const supabase = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
+    );
+
+    const { data: existingBooking, error: lookupError } = await supabase
+      .from("bookings")
+      .select("id")
+      .eq("camper_id", camper_id)
+      .eq("customer_email", customer_email)
+      .eq("start_date", start_date)
+      .eq("end_date", end_date)
+      .limit(1)
+      .maybeSingle();
+
+    if (lookupError || !existingBooking) {
+      return new Response(JSON.stringify({ error: "Booking not found" }), {
+        status: 403,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     const emailHtml = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
