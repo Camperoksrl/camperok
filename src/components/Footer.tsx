@@ -14,7 +14,7 @@ const Footer = () => {
               <span className="text-xl font-bold text-display">Camperok</span>
             </div>
             <p className="text-background/60 text-sm leading-relaxed">
-              La tua avventura su ruote inizia qui. Noleggia il camper perfetto per esplorare l'Italia.
+              La tua avventura su ruote inizia qui. Noleggia il camper perfetto per esplorare l'Italia e l'Europa.
             </p>
           </div>
 
