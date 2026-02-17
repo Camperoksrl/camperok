@@ -16,36 +16,57 @@ export type Database = {
     Tables: {
       bookings: {
         Row: {
+          amount_paid: number | null
           camper_id: string
           created_at: string
           customer_email: string
           customer_name: string
           end_date: string
           id: string
+          payment_status: string | null
+          payment_type: string | null
+          phone: string | null
           start_date: string
           status: string
+          stripe_session_id: string | null
+          terms_accepted_at: string | null
+          terms_accepted_ip: string | null
           total_price: number
         }
         Insert: {
+          amount_paid?: number | null
           camper_id: string
           created_at?: string
           customer_email: string
           customer_name: string
           end_date: string
           id?: string
+          payment_status?: string | null
+          payment_type?: string | null
+          phone?: string | null
           start_date: string
           status?: string
+          stripe_session_id?: string | null
+          terms_accepted_at?: string | null
+          terms_accepted_ip?: string | null
           total_price?: number
         }
         Update: {
+          amount_paid?: number | null
           camper_id?: string
           created_at?: string
           customer_email?: string
           customer_name?: string
           end_date?: string
           id?: string
+          payment_status?: string | null
+          payment_type?: string | null
+          phone?: string | null
           start_date?: string
           status?: string
+          stripe_session_id?: string | null
+          terms_accepted_at?: string | null
+          terms_accepted_ip?: string | null
           total_price?: number
         }
         Relationships: [
