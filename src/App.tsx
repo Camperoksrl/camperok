@@ -13,6 +13,8 @@ import AdminDashboard from "./pages/AdminDashboard";
 import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import CookiesPolicy from "./pages/CookiesPolicy";
+import RentalTerms from "./pages/RentalTerms";
+import BookingConfirmed from "./pages/BookingConfirmed";
 import CookieBanner from "./components/CookieBanner";
 
 const queryClient = new QueryClient();
@@ -33,6 +35,8 @@ const App = () => (
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/cookie-policy" element={<CookiesPolicy />} />
+          <Route path="/condizioni-noleggio" element={<RentalTerms />} />
+          <Route path="/prenotazione-confermata" element={<BookingConfirmed />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <CookieBanner />

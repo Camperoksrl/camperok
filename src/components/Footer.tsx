@@ -32,6 +32,7 @@ const Footer = () => {
             <div className="space-y-2">
               <Link to="/privacy-policy" className="block text-background/60 hover:text-background text-sm transition-colors">Privacy Policy</Link>
               <Link to="/cookie-policy" className="block text-background/60 hover:text-background text-sm transition-colors">Cookie Policy</Link>
+              <Link to="/condizioni-noleggio" className="block text-background/60 hover:text-background text-sm transition-colors">Condizioni di Noleggio</Link>
               <button onClick={reopenCookieBanner} className="block text-background/60 hover:text-background text-sm transition-colors text-left">
                 Gestisci Cookie
               </button>
