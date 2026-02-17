@@ -4,13 +4,15 @@ import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { vehicles, getMinPrice, calculateTotalPrice, hasUnavailableDays } from "@/data/vehicles";
 import { addBooking } from "@/lib/adminStore";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import {
-  Users, BedDouble, Ruler, MapPin, Check, ArrowLeft, Calendar, ChevronRight,
+  Users, BedDouble, Ruler, MapPin, Check, ArrowLeft, Calendar, ChevronRight, Phone,
 } from "lucide-react";
 
 const VehicleDetail = () => {
@@ -22,6 +24,9 @@ const VehicleDetail = () => {
   const [endDate, setEndDate] = useState("");
   const [customerName, setCustomerName] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");
+  const [customerPhone, setCustomerPhone] = useState("");
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [paymentType, setPaymentType] = useState<"deposit" | "full">("deposit");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedImage, setSelectedImage] = useState(0);
 
@@ -52,39 +57,28 @@ const VehicleDetail = () => {
   const totalPrice = days > 0 ? calculateTotalPrice(vehicle, startDate, endDate) : 0;
   const avgPricePerDay = days > 0 ? Math.round(totalPrice / days) : 0;
   const unavailablePeriod = startDate && endDate && days > 0 ? hasUnavailableDays(vehicle, startDate, endDate) : null;
+  const depositAmount = Math.round(totalPrice * 0.3);
 
   const handleBooking = async () => {
     if (!customerName.trim() || !customerEmail.trim()) {
-      toast({
-        title: "Dati mancanti",
-        description: "Inserisci nome e email per procedere.",
-        variant: "destructive",
-      });
+      toast({ title: "Dati mancanti", description: "Inserisci nome e email per procedere.", variant: "destructive" });
       return;
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(customerEmail.trim())) {
-      toast({
-        title: "Email non valida",
-        description: "Inserisci un indirizzo email valido.",
-        variant: "destructive",
-      });
+      toast({ title: "Email non valida", description: "Inserisci un indirizzo email valido.", variant: "destructive" });
       return;
     }
     if (!startDate || !endDate || days < 1) {
-      toast({
-        title: "Date non valide",
-        description: "Seleziona le date di ritiro e riconsegna.",
-        variant: "destructive",
-      });
+      toast({ title: "Date non valide", description: "Seleziona le date di ritiro e riconsegna.", variant: "destructive" });
       return;
     }
     if (unavailablePeriod) {
-      toast({
-        title: "Periodo non disponibile",
-        description: `Il veicolo non è disponibile dal ${unavailablePeriod.startDate} al ${unavailablePeriod.endDate}${unavailablePeriod.reason ? ` (${unavailablePeriod.reason})` : ""}.`,
-        variant: "destructive",
-      });
+      toast({ title: "Periodo non disponibile", description: `Il veicolo non è disponibile dal ${unavailablePeriod.startDate} al ${unavailablePeriod.endDate}.`, variant: "destructive" });
+      return;
+    }
+    if (!termsAccepted) {
+      toast({ title: "Condizioni non accettate", description: "Devi accettare le condizioni generali di noleggio.", variant: "destructive" });
       return;
     }
 
@@ -97,30 +91,29 @@ const VehicleDetail = () => {
         start_date: startDate,
         end_date: endDate,
         total_price: totalPrice,
+        phone: customerPhone.trim() || null,
+        terms_accepted_at: new Date().toISOString(),
+        payment_type: paymentType,
       });
 
       if ("error" in result) {
-        toast({
-          title: "Errore",
-          description: "Non è stato possibile inviare la prenotazione. Riprova.",
-          variant: "destructive",
+        toast({ title: "Errore", description: "Non è stato possibile inviare la prenotazione. Riprova.", variant: "destructive" });
+      } else if ("booking_id" in result) {
+        // Redirect to Stripe Checkout
+        toast({ title: "Prenotazione registrata ✅", description: "Reindirizzamento al pagamento..." });
+
+        const { data, error } = await supabase.functions.invoke("create-checkout", {
+          body: { booking_id: result.booking_id, payment_type: paymentType },
         });
-      } else {
-        toast({
-          title: "Richiesta Inviata! ✅",
-          description: `Prenotazione per ${vehicle.name} dal ${startDate} al ${endDate} (${days} giorni, €${totalPrice}). Ti contatteremo a breve.`,
-        });
-        setCustomerName("");
-        setCustomerEmail("");
-        setStartDate("");
-        setEndDate("");
+
+        if (error || !data?.url) {
+          toast({ title: "Errore pagamento", description: "Non è stato possibile avviare il pagamento. Ti contatteremo.", variant: "destructive" });
+        } else {
+          window.location.href = data.url;
+        }
       }
     } catch {
-      toast({
-        title: "Errore",
-        description: "Si è verificato un errore. Riprova più tardi.",
-        variant: "destructive",
-      });
+      toast({ title: "Errore", description: "Si è verificato un errore. Riprova più tardi.", variant: "destructive" });
     } finally {
       setIsSubmitting(false);
     }
@@ -215,7 +208,7 @@ const VehicleDetail = () => {
 
             {/* Booking Sidebar */}
             <div className="lg:col-span-1">
-              <div className="sticky top-24 bg-card border border-border rounded-2xl p-6 space-y-6">
+              <div className="sticky top-24 bg-card border border-border rounded-2xl p-6 space-y-5">
                 <div className="text-center">
                   <p className="text-sm text-muted-foreground">a partire da</p>
                   <p className="text-3xl font-bold text-foreground">
@@ -224,51 +217,34 @@ const VehicleDetail = () => {
                   </p>
                 </div>
 
-                <div className="space-y-4">
+                <div className="space-y-3">
                   <div>
                     <Label className="text-sm font-medium text-foreground">Nome e Cognome</Label>
-                    <Input
-                      type="text"
-                      placeholder="Mario Rossi"
-                      className="mt-1 rounded-xl"
-                      value={customerName}
-                      onChange={(e) => setCustomerName(e.target.value)}
-                      maxLength={200}
-                    />
+                    <Input type="text" placeholder="Mario Rossi" className="mt-1 rounded-xl" value={customerName} onChange={(e) => setCustomerName(e.target.value)} maxLength={200} />
                   </div>
                   <div>
                     <Label className="text-sm font-medium text-foreground">Email</Label>
-                    <Input
-                      type="email"
-                      placeholder="mario@esempio.it"
-                      className="mt-1 rounded-xl"
-                      value={customerEmail}
-                      onChange={(e) => setCustomerEmail(e.target.value)}
-                      maxLength={255}
-                    />
+                    <Input type="email" placeholder="mario@esempio.it" className="mt-1 rounded-xl" value={customerEmail} onChange={(e) => setCustomerEmail(e.target.value)} maxLength={255} />
+                  </div>
+                  <div>
+                    <Label className="text-sm font-medium text-foreground">Telefono</Label>
+                    <div className="relative mt-1">
+                      <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                      <Input type="tel" placeholder="+39 333 1234567" className="pl-10 rounded-xl" value={customerPhone} onChange={(e) => setCustomerPhone(e.target.value)} maxLength={30} />
+                    </div>
                   </div>
                   <div>
                     <Label className="text-sm font-medium text-foreground">Data Ritiro</Label>
                     <div className="relative mt-1">
                       <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        type="date"
-                        className="pl-10 rounded-xl"
-                        value={startDate}
-                        onChange={(e) => setStartDate(e.target.value)}
-                      />
+                      <Input type="date" className="pl-10 rounded-xl" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
                     </div>
                   </div>
                   <div>
                     <Label className="text-sm font-medium text-foreground">Data Riconsegna</Label>
                     <div className="relative mt-1">
                       <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        type="date"
-                        className="pl-10 rounded-xl"
-                        value={endDate}
-                        onChange={(e) => setEndDate(e.target.value)}
-                      />
+                      <Input type="date" className="pl-10 rounded-xl" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
                     </div>
                   </div>
                 </div>
@@ -285,6 +261,7 @@ const VehicleDetail = () => {
                     </div>
                   </div>
                 )}
+
                 {unavailablePeriod && (
                   <div className="bg-destructive/10 border border-destructive/30 rounded-xl p-4 text-sm text-destructive">
                     <p className="font-medium">⚠️ Veicolo non disponibile</p>
@@ -292,16 +269,65 @@ const VehicleDetail = () => {
                   </div>
                 )}
 
+                {/* Payment type selection */}
+                {days > 0 && !unavailablePeriod && (
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium text-foreground">Modalità di pagamento</Label>
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setPaymentType("deposit")}
+                        className={`rounded-xl border p-3 text-center text-sm transition-all ${
+                          paymentType === "deposit"
+                            ? "border-primary bg-primary/10 text-foreground"
+                            : "border-border text-muted-foreground hover:border-primary/50"
+                        }`}
+                      >
+                        <p className="font-semibold">Caparra 30%</p>
+                        <p className="text-xs mt-1">€{depositAmount}</p>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setPaymentType("full")}
+                        className={`rounded-xl border p-3 text-center text-sm transition-all ${
+                          paymentType === "full"
+                            ? "border-primary bg-primary/10 text-foreground"
+                            : "border-border text-muted-foreground hover:border-primary/50"
+                        }`}
+                      >
+                        <p className="font-semibold">Totale</p>
+                        <p className="text-xs mt-1">€{totalPrice}</p>
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* Terms checkbox */}
+                <div className="flex items-start gap-3">
+                  <Checkbox
+                    id="terms"
+                    checked={termsAccepted}
+                    onCheckedChange={(checked) => setTermsAccepted(checked === true)}
+                    className="mt-0.5"
+                  />
+                  <label htmlFor="terms" className="text-xs text-muted-foreground leading-relaxed cursor-pointer">
+                    Dichiaro di aver letto e accettato le{" "}
+                    <Link to="/condizioni-noleggio" target="_blank" className="text-primary underline hover:text-primary/80">
+                      Condizioni Generali di Noleggio
+                    </Link>.
+                  </label>
+                </div>
+
                 <Button
                   className="w-full bg-accent text-accent-foreground hover:bg-accent/90 rounded-full text-base py-6"
                   onClick={handleBooking}
-                  disabled={!!unavailablePeriod || isSubmitting}
+                  disabled={!!unavailablePeriod || isSubmitting || !termsAccepted}
                 >
-                  {isSubmitting ? "Invio in corso..." : "Richiedi Prenotazione"}
+                  {isSubmitting ? "Invio in corso..." : "Prenota e Paga"}
                 </Button>
 
                 <p className="text-xs text-muted-foreground text-center">
-                  Nessun addebito immediato. Ti contatteremo per confermare la disponibilità.
+                  Verrai reindirizzato a Stripe per il pagamento sicuro.
                 </p>
               </div>
             </div>

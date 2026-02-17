@@ -102,32 +102,63 @@ serve(async (req) => {
       </div>
     `;
 
-    const res = await fetch("https://api.resend.com/emails", {
+    // Email to admin
+    const adminRes = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: "CamperOK <onboarding@resend.dev>",
+        from: "CamperOK <noreply@camperok.it>",
         to: [NOTIFY_EMAIL],
         subject: `Nuova Prenotazione: ${customer_name} (${start_date} → ${end_date})`,
         html: emailHtml,
       }),
     });
 
-    const data = await res.json();
-
-    if (!res.ok) {
-      console.error("Resend API error:", JSON.stringify(data));
-      return new Response(JSON.stringify({ error: "Email send failed", details: data }), {
-        status: res.status,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+    const adminData = await adminRes.json();
+    if (!adminRes.ok) {
+      console.error("Admin email error:", JSON.stringify(adminData));
     }
 
-    console.log("Notification email sent successfully:", data.id);
-    return new Response(JSON.stringify({ success: true, emailId: data.id }), {
+    // Email to customer
+    const customerHtml = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+        <h2 style="color: #2d5016;">🚐 Prenotazione Ricevuta</h2>
+        <p>Gentile ${customer_name},</p>
+        <p>Abbiamo ricevuto la tua richiesta di prenotazione. Ecco il riepilogo:</p>
+        <table style="width:100%;border-collapse:collapse;margin:16px 0;">
+          <tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold;">Periodo</td><td style="padding:8px;border:1px solid #ddd;">${start_date} — ${end_date}</td></tr>
+          <tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold;">Importo totale</td><td style="padding:8px;border:1px solid #ddd;">€${total_price}</td></tr>
+        </table>
+        <p>Procedi al pagamento tramite il link che hai ricevuto. Dopo il pagamento, riceverai la conferma definitiva.</p>
+        <p>Per qualsiasi domanda, contattaci a <a href="mailto:camperokroma@gmail.com">camperokroma@gmail.com</a> o al 339-2715067.</p>
+        <p>Grazie e buon viaggio!<br/>Il Team CamperOK</p>
+      </div>
+    `;
+
+    const customerRes = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${RESEND_API_KEY}`,
+      },
+      body: JSON.stringify({
+        from: "CamperOK <noreply@camperok.it>",
+        to: [customer_email],
+        subject: `Prenotazione ricevuta – CamperOK`,
+        html: customerHtml,
+      }),
+    });
+
+    const customerData = await customerRes.json();
+    if (!customerRes.ok) {
+      console.error("Customer email error:", JSON.stringify(customerData));
+    }
+
+    console.log("Notification emails sent:", { admin: adminData.id, customer: customerData.id });
+    return new Response(JSON.stringify({ success: true }), {
       status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
