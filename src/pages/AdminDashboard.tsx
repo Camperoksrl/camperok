@@ -15,7 +15,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useToast } from "@/hooks/use-toast";
-import { LogOut, Plus, Pencil, Trash2, Truck, CalendarDays, ClipboardList, Home, Calendar } from "lucide-react";
+import { LogOut, Plus, Pencil, Trash2, Truck, CalendarDays, ClipboardList, Home, Calendar, Download } from "lucide-react";
 import BookingCalendar from "@/components/BookingCalendar";
 
 const statusColors: Record<string, string> = {
@@ -80,6 +80,28 @@ const AdminDashboard = () => {
     const result = await addBooking(bookingForm);
     if ("error" in result) { toast({ title: "Errore", description: result.error, variant: "destructive" }); return; }
     toast({ title: "Prenotazione creata" }); setBookingDialogOpen(false); await refresh();
+  };
+
+  const exportCSV = () => {
+    const headers = ["Cliente", "Email", "Camper", "Check-in", "Check-out", "Totale", "Stato"];
+    const rows = filteredBookings.map(b => [
+      b.customer_name,
+      b.customer_email,
+      campers.find(c => c.id === b.camper_id)?.name || b.camper_id,
+      b.start_date,
+      b.end_date,
+      b.total_price,
+      statusLabels[b.status] || b.status,
+    ]);
+    const csv = [headers, ...rows].map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(",")).join("\n");
+    const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `prenotazioni_${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast({ title: "CSV esportato" });
   };
 
   const filteredBookings = bookings.filter(b => {
@@ -158,6 +180,7 @@ const AdminDashboard = () => {
                   {campers.map(c => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
                 </SelectContent>
               </Select>
+              <Button variant="outline" size="sm" onClick={exportCSV}><Download className="h-4 w-4 mr-1" /> CSV</Button>
               <Dialog open={bookingDialogOpen} onOpenChange={setBookingDialogOpen}>
                 <DialogTrigger asChild><Button size="sm" onClick={openNewBooking}><Plus className="h-4 w-4 mr-1" /> Nuova</Button></DialogTrigger>
                 <DialogContent>
