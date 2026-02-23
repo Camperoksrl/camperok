@@ -209,7 +209,7 @@ export const vehicles: Vehicle[] = [
     capacity: 6,
     beds: 6,
     length: "6.7m",
-    features: ["Aria condizionata", "Pannello solare", "Doppio serbatoio acqua", "Porta bici", "Telecamera retromarcia", "Cucina", "Bagno con doccia", "Letti a castello", "Letto mansarda", "Dinette"],
+    features: ["Aria condizionata", "Pannello solare", "Doppio serbatoio acqua", "Porta bici", "Telecamera retromarcia", "Cucina", "Bagno con doccia", "Letti a castello", "Letto mansarda", "Dinette", "Tavolo e sedie da campeggio", "Kit di pronto soccorso", "Bombola di gas nuova", "Doccetta solare", "Stuoia", "Amaca"],
     description: "Il Rimor Europeo NG6 è un camper 6 posti molto spazioso. È provvisto di aria condizionata in cabina, doppio serbatoio di acqua, porta bici, telecamera per la retromarcia e pannello solare. Comodo da guidare e spazioso per tutta la famiglia, saprà condurti ovunque in piena sicurezza.",
     shortDescription: "6 posti, spazioso e sicuro. Ideale per tutta la famiglia.",
     location: "Roma",
