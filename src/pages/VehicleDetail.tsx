@@ -12,8 +12,9 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import {
-  Users, BedDouble, Ruler, MapPin, Check, ArrowLeft, Calendar, ChevronRight, Phone,
+  Users, BedDouble, Ruler, MapPin, Check, ArrowLeft, Calendar, ChevronRight, Phone, ChevronLeft, X,
 } from "lucide-react";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 const VehicleDetail = () => {
   const { id } = useParams();
