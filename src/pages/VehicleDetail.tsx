@@ -12,8 +12,9 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import {
-  Users, BedDouble, Ruler, MapPin, Check, ArrowLeft, Calendar, ChevronRight, Phone,
+  Users, BedDouble, Ruler, MapPin, Check, ArrowLeft, Calendar, ChevronRight, Phone, ChevronLeft, X,
 } from "lucide-react";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 
 const VehicleDetail = () => {
   const { id } = useParams();
@@ -29,6 +30,7 @@ const VehicleDetail = () => {
   const [paymentType, setPaymentType] = useState<"deposit" | "full">("deposit");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
 
   if (!vehicle) {
     return (
@@ -138,11 +140,11 @@ const VehicleDetail = () => {
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-8">
               {/* Main Image */}
-              <div className="rounded-2xl overflow-hidden">
+              <div className="rounded-2xl overflow-hidden cursor-pointer" onClick={() => setLightboxOpen(true)}>
                 <img
                   src={vehicle.images?.[selectedImage] ?? vehicle.image}
                   alt={vehicle.name}
-                  className="w-full h-[400px] md:h-[500px] object-cover"
+                  className="w-full h-[400px] md:h-[500px] object-cover hover:scale-[1.02] transition-transform duration-300"
                 />
               </div>
 
@@ -334,6 +336,38 @@ const VehicleDetail = () => {
           </div>
         </div>
       </div>
+
+      {/* Lightbox */}
+      <Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
+        <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 border-none bg-black/95 overflow-hidden">
+          <div className="relative flex items-center justify-center min-h-[60vh]">
+            <img
+              src={vehicle.images?.[selectedImage] ?? vehicle.image}
+              alt={vehicle.name}
+              className="max-w-full max-h-[85vh] object-contain"
+            />
+            {vehicle.images && vehicle.images.length > 1 && (
+              <>
+                <button
+                  onClick={() => setSelectedImage((prev) => (prev - 1 + vehicle.images!.length) % vehicle.images!.length)}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 text-white rounded-full p-2 transition-colors"
+                >
+                  <ChevronLeft className="h-6 w-6" />
+                </button>
+                <button
+                  onClick={() => setSelectedImage((prev) => (prev + 1) % vehicle.images!.length)}
+                  className="absolute right-10 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 text-white rounded-full p-2 transition-colors"
+                >
+                  <ChevronRight className="h-6 w-6" />
+                </button>
+              </>
+            )}
+            <p className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/70 text-sm">
+              {selectedImage + 1} / {vehicle.images?.length ?? 1}
+            </p>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <Footer />
     </div>
