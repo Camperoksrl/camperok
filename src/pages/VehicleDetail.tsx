@@ -140,11 +140,11 @@ const VehicleDetail = () => {
             {/* Main Content */}
             <div className="lg:col-span-2 space-y-8">
               {/* Main Image */}
-              <div className="rounded-2xl overflow-hidden">
+              <div className="rounded-2xl overflow-hidden cursor-pointer" onClick={() => setLightboxOpen(true)}>
                 <img
                   src={vehicle.images?.[selectedImage] ?? vehicle.image}
                   alt={vehicle.name}
-                  className="w-full h-[400px] md:h-[500px] object-cover"
+                  className="w-full h-[400px] md:h-[500px] object-cover hover:scale-[1.02] transition-transform duration-300"
                 />
               </div>
 
