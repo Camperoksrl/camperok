@@ -30,6 +30,7 @@ const VehicleDetail = () => {
   const [paymentType, setPaymentType] = useState<"deposit" | "full">("deposit");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedImage, setSelectedImage] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
 
   if (!vehicle) {
     return (
