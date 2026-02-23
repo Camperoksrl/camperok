@@ -337,6 +337,38 @@ const VehicleDetail = () => {
         </div>
       </div>
 
+      {/* Lightbox */}
+      <Dialog open={lightboxOpen} onOpenChange={setLightboxOpen}>
+        <DialogContent className="max-w-[95vw] max-h-[95vh] p-0 border-none bg-black/95 overflow-hidden">
+          <div className="relative flex items-center justify-center min-h-[60vh]">
+            <img
+              src={vehicle.images?.[selectedImage] ?? vehicle.image}
+              alt={vehicle.name}
+              className="max-w-full max-h-[85vh] object-contain"
+            />
+            {vehicle.images && vehicle.images.length > 1 && (
+              <>
+                <button
+                  onClick={() => setSelectedImage((prev) => (prev - 1 + vehicle.images!.length) % vehicle.images!.length)}
+                  className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 text-white rounded-full p-2 transition-colors"
+                >
+                  <ChevronLeft className="h-6 w-6" />
+                </button>
+                <button
+                  onClick={() => setSelectedImage((prev) => (prev + 1) % vehicle.images!.length)}
+                  className="absolute right-10 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/40 text-white rounded-full p-2 transition-colors"
+                >
+                  <ChevronRight className="h-6 w-6" />
+                </button>
+              </>
+            )}
+            <p className="absolute bottom-4 left-1/2 -translate-x-1/2 text-white/70 text-sm">
+              {selectedImage + 1} / {vehicle.images?.length ?? 1}
+            </p>
+          </div>
+        </DialogContent>
+      </Dialog>
+
       <Footer />
     </div>
   );
