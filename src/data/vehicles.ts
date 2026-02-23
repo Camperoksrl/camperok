@@ -264,7 +264,7 @@ export const vehicles: Vehicle[] = [
     capacity: 6,
     beds: 6,
     length: "6.8m",
-    features: ["Aria condizionata", "Pannello solare", "Porta bici", "Garage posteriore", "Telecamera retromarcia", "Cucina", "Letti a castello", "Letto mansarda", "Dinette"],
+    features: ["Aria condizionata", "Pannello solare", "Porta bici", "Garage posteriore", "Telecamera retromarcia", "Cucina", "Letti a castello", "Letto mansarda", "Dinette", "Tavolo e sedie da campeggio", "Kit di pronto soccorso", "Bombola di gas nuova", "Doccetta solare", "Stuoia", "Amaca"],
     description: "Il Roller Team Autoroller 2 ha l'aria condizionata in cabina, il pannello solare, 6 posti letto e il portabici. Un ampio garage in coda ti aiuterà a stivare tutto quello che vuoi portare con te in vacanza. È lungo 6,8 metri ed è provvisto di telecamera di retromarcia.",
     shortDescription: "6 posti con garage posteriore, pannello solare e telecamera.",
     location: "Roma",
