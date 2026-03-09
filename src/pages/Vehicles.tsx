@@ -6,6 +6,7 @@ import { vehicles, vehicleTypes } from "@/data/vehicles";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { SlidersHorizontal } from "lucide-react";
+import SEO from "../SEO";
 
 const Vehicles = () => {
   const [selectedType, setSelectedType] = useState("all");
@@ -23,6 +24,14 @@ const Vehicles = () => {
   }, [selectedType, maxPrice, minCapacity]);
 
   return (
+<>
+  <SEO
+    title="Noleggio Camper Roma | CamperOK"
+    canonical="https://www.camperok.it/veicoli"
+  />
+  
+  {/* resto della pagina */}
+</>
     <div className="min-h-screen">
       <Navigation />
 
