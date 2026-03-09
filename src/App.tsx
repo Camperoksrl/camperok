@@ -29,9 +29,16 @@ const App = () => (
           <Route path="/it" element={<Navigate to="/" replace />} />
 <Route path="/it/" element={<Navigate to="/" replace />} />
 <Route path="/it/home" element={<Navigate to="/" replace />} />
-<Route path="/it/chi-siamo" element={<Navigate to="/chi-siamo" replace />} />
+<Route path="/it/chi-siamo" element={<Navigate to="/" replace />} />
+
+<Route path="/en" element={<Navigate to="/" replace />} />
+<Route path="/en/" element={<Navigate to="/" replace />} />
+<Route path="/en/noleggio-camper" element={<Navigate to="/veicoli" replace />} />
+<Route path="/en/servizi" element={<Navigate to="/come-funziona" replace />} />
+<Route path="/en/contatti" element={<Navigate to="/contatti" replace />} />
+
 <Route path="/product-detail" element={<Navigate to="/" replace />} />
-<Route path="/en/product-detail" element={<Navigate to="/en/" replace />} />
+<Route path="/en/product-detail" element={<Navigate to="/" replace />} />
           <Route path="/" element={<Index />} />
           <Route path="/veicoli" element={<Vehicles />} />
           <Route path="/veicoli/:id" element={<VehicleDetail />} />
