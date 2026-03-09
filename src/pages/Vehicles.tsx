@@ -27,7 +27,7 @@ const Vehicles = () => {
 <>
   <SEO
     title="Noleggio Camper Roma | CamperOK"
-    canonical="https://www.camperok.it/veicoli"
+    canonical="https://www.camperok.it/noleggio-camper-roma"
   />
   
   {/* resto della pagina */}
