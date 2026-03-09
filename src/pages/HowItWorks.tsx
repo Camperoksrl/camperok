@@ -9,6 +9,16 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import SEO from "../SEO";
+
+<>
+  <SEO
+    title="Come Funziona | CamperOK"
+    canonical="https://www.camperok.it/come-funziona"
+  />
+
+  {/* resto della pagina */}
+</>
 
 const steps = [
   {
