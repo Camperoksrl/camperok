@@ -40,7 +40,7 @@ const App = () => (
 <Route path="/product-detail" element={<Navigate to="/" replace />} />
 <Route path="/en/product-detail" element={<Navigate to="/" replace />} />
           <Route path="/" element={<Index />} />
-          <Route path="/veicoli" element={<Vehicles />} />
+          <Route path="/noleggio-camper-roma" element={<Vehicles />} />
           <Route path="/veicoli/:id" element={<VehicleDetail />} />
           <Route path="/come-funziona" element={<HowItWorks />} />
           <Route path="/contatti" element={<Contatti />} />
