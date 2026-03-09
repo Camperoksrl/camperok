@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Index from "./pages/Index";
 import Vehicles from "./pages/Vehicles";
 import VehicleDetail from "./pages/VehicleDetail";
@@ -26,6 +26,12 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
+          <Route path="/it" element={<Navigate to="/" replace />} />
+<Route path="/it/" element={<Navigate to="/" replace />} />
+<Route path="/it/home" element={<Navigate to="/" replace />} />
+<Route path="/it/chi-siamo" element={<Navigate to="/chi-siamo" replace />} />
+<Route path="/product-detail" element={<Navigate to="/" replace />} />
+<Route path="/en/product-detail" element={<Navigate to="/en/" replace />} />
           <Route path="/" element={<Index />} />
           <Route path="/veicoli" element={<Vehicles />} />
           <Route path="/veicoli/:id" element={<VehicleDetail />} />
