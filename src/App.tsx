@@ -41,6 +41,7 @@ const App = () => (
 <Route path="/en/product-detail" element={<Navigate to="/" replace />} />
           <Route path="/" element={<Index />} />
           <Route path="/noleggio-camper-roma" element={<Vehicles />} />
+          <Route path="/veicoli" element={<Navigate to="/noleggio-camper-roma" replace />} /> 
           <Route path="/veicoli/:id" element={<VehicleDetail />} />
           <Route path="/come-funziona" element={<HowItWorks />} />
           <Route path="/contatti" element={<Contatti />} />
