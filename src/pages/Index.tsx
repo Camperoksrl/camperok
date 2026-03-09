@@ -6,6 +6,16 @@ import { Button } from "@/components/ui/button";
 import { vehicles } from "@/data/vehicles";
 import { Shield, Clock, MapPin, Headphones, ArrowRight, Star } from "lucide-react";
 import heroRv from "@/assets/hero-rv.jpg";
+import SEO from "../SEO";
+
+<>
+  <SEO
+    title="CamperOK | Noleggio Camper Roma"
+    canonical="https://www.camperok.it/"
+  />
+
+  {/* resto della pagina */}
+</>
 
 const Index = () => {
   const featuredVehicles = vehicles.slice(0, 3);
