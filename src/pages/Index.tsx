@@ -40,7 +40,7 @@ const Index = () => {
               Scopri l'Italia e l'Europa a bordo dei nostri camper. Dalle Dolomiti alla Sicilia, ogni strada diventa un'esperienza indimenticabile.
             </p>
             <div className="flex flex-wrap gap-4">
-              <Link to="/veicoli">
+              <Link to="/noleggio-camper-roma">
                 <Button size="lg" className="bg-accent text-accent-foreground hover:bg-accent/90 rounded-full px-8 text-base">
                   Esplora i Veicoli
                   <ArrowRight className="ml-2 h-5 w-5" />
