@@ -26,14 +26,18 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/it" element={<Navigate to="/" replace />} />
+         {/* Redirect SEO per URL vecchie o duplicate */}
+
+<Route path="/it" element={<Navigate to="/" replace />} />
 <Route path="/it/" element={<Navigate to="/" replace />} />
 <Route path="/it/home" element={<Navigate to="/" replace />} />
 <Route path="/it/chi-siamo" element={<Navigate to="/" replace />} />
 
+<Route path="/novita" element={<Navigate to="/" replace />} />
+
 <Route path="/en" element={<Navigate to="/" replace />} />
 <Route path="/en/" element={<Navigate to="/" replace />} />
-<Route path="/en/noleggio-camper" element={<Navigate to="/veicoli" replace />} />
+<Route path="/en/noleggio-camper" element={<Navigate to="/noleggio-camper-roma" replace />} />
 <Route path="/en/servizi" element={<Navigate to="/come-funziona" replace />} />
 <Route path="/en/contatti" element={<Navigate to="/contatti" replace />} />
 
