@@ -51,12 +51,12 @@ serve(async (req) => {
     );
 
     const { data: existingBooking, error: lookupError } = await supabase
-      .from("bookings")
+      .from("prenotazioni")
       .select("id")
-      .eq("camper_id", camper_id)
-      .eq("customer_email", customer_email)
-      .eq("start_date", start_date)
-      .eq("end_date", end_date)
+      .eq("camper", camper_id)
+      .eq("email", customer_email)
+      .eq("data_inizio", start_date)
+      .eq("data_fine", end_date)
       .limit(1)
       .maybeSingle();
 
