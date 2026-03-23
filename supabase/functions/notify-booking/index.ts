@@ -52,7 +52,6 @@ serve(async (req) => {
 
     const { data: existingBooking, error: lookupError } = await supabase
       .from("bookings")
-      .select("id")
       .eq("camper_id", camper_id)
       .eq("customer_email", customer_email)
       .eq("start_date", start_date)
