@@ -88,6 +88,7 @@ const VehicleDetail = () => {
     try {
       const result = await addBooking({
         camper_id: vehicle.dbId || vehicle.id,
+        camper_name: vehicle.name,
         customer_name: customerName.trim().slice(0, 200),
         customer_email: customerEmail.trim().slice(0, 255).toLowerCase(),
         start_date: startDate,
@@ -96,8 +97,7 @@ const VehicleDetail = () => {
         phone: customerPhone.trim() || null,
         terms_accepted_at: new Date().toISOString(),
         payment_type: paymentType,
-      });
-
+        });
       if ("error" in result) {
         toast({ title: "Errore", description: "Non è stato possibile inviare la prenotazione. Riprova.", variant: "destructive" });
       } else if ("booking_id" in result) {
