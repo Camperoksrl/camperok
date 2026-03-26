@@ -15,6 +15,7 @@ export interface Camper {
 export interface Booking {
   id: string;
   camper_id: string;
+  camper_name?: string;
   customer_name: string;
   customer_email: string;
   start_date: string;
