@@ -34,6 +34,7 @@ serve(async (req) => {
       end_date,
       total_price,
       camper_id,
+      camper_name,
     } = booking;
 
     // Validate required fields
