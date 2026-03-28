@@ -23,15 +23,14 @@ const Vehicles = () => {
     });
   }, [selectedType, maxPrice, minCapacity]);
 
-  return (
-<>
-  <SEO
-    title="Noleggio Camper Roma | CamperOK"
-    canonical="https://www.camperok.it/noleggio-camper-roma"
-  />
-  
-  {/* resto della pagina */}
-</>
+ return (
+  <>
+    <SEO
+      title="Noleggio Camper Roma | CamperOK"
+      canonical="https://www.camperok.it/noleggio-camper-roma"
+    />
+
+    {/* resto della pagina */}
     <div className="min-h-screen">
       <Navigation />
 
