@@ -36,6 +36,14 @@ serve(async (req) => {
       camper_id,
       camper_name,
     } = booking;
+    
+    const { data: camper } = await supabase
+      .from("campers")
+      .select("name")
+      .eq("id", camper_id)
+      .single();
+
+const camperName = camper?.name || "Camper";
 
     // Validate required fields
     if (!customer_name || !customer_email || !start_date || !end_date || !camper_id) {
