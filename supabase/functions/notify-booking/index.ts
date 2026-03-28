@@ -170,7 +170,7 @@ const camperName = camper?.name || "Camper";
         Authorization: `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: "CamperOK <noreply@camperok.it>",
+        from: "CamperOK <prenotazioni@camperok.it>",
         to: [customer_email],
         subject: `Prenotazione ricevuta – CamperOK`,
         html: customerHtml,
