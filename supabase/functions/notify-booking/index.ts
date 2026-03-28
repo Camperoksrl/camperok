@@ -112,7 +112,7 @@ const camperName = camper?.name || "Camper";
         Authorization: `Bearer ${RESEND_API_KEY}`,
       },
       body: JSON.stringify({
-        from: "CamperOK <noreply@camperok.it>",
+        from: "CamperOK <prenotazioni@camperok.it>",
         to: [NOTIFY_EMAIL],
         subject: `Nuova Prenotazione: ${customer_name} (${start_date} → ${end_date})`,
         html: emailHtml,
