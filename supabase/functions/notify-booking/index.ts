@@ -76,40 +76,34 @@ const camperName = camper?.name || "Camper";
     }
 
     const emailHtml = `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <h2 style="color: #2d5016; border-bottom: 2px solid #2d5016; padding-bottom: 10px;">
-          🚐 Nuova Richiesta di Prenotazione
-        </h2>
-        <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
-          <tr>
-            <td style="padding: 8px 12px; font-weight: bold; background: #f5f5f5; border: 1px solid #ddd;">Cliente</td>
-            <td style="padding: 8px 12px; border: 1px solid #ddd;">${customer_name}</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px 12px; font-weight: bold; background: #f5f5f5; border: 1px solid #ddd;">Email</td>
-            <td style="padding: 8px 12px; border: 1px solid #ddd;">
-              <a href="mailto:${customer_email}">${customer_email}</a>
-            </td>
-          </tr>
-          <tr>
-            <td style="padding: 8px 12px; font-weight: bold; background: #f5f5f5; border: 1px solid #ddd;">Data Ritiro</td>
-            <td style="padding: 8px 12px; border: 1px solid #ddd;">${start_date}</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px 12px; font-weight: bold; background: #f5f5f5; border: 1px solid #ddd;">Data Riconsegna</td>
-            <td style="padding: 8px 12px; border: 1px solid #ddd;">${end_date}</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px 12px; font-weight: bold; background: #f5f5f5; border: 1px solid #ddd;">Totale</td>
-            <td style="padding: 8px 12px; border: 1px solid #ddd; font-weight: bold; color: #2d5016;">€${total_price}</td>
-          </tr>
-        </table>
-        <p style="color: #666; font-size: 14px;">
-          Accedi al pannello admin per gestire questa prenotazione.
-        </p>
-      </div>
-    `;
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+      <h2 style="color: #2d5016;">🚐 Nuova Prenotazione</h2>
 
+      <p><strong>Camper:</strong> ${camperName}</p>
+
+      <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+        <tr>
+          <td style="padding: 8px; border: 1px solid #ddd;"><strong>Cliente</strong></td>
+          <td style="padding: 8px; border: 1px solid #ddd;">${customer_name}</td>
+        </tr>
+        <tr>
+          <td style="padding: 8px; border: 1px solid #ddd;"><strong>Email</strong></td>
+          <td style="padding: 8px; border: 1px solid #ddd;">${customer_email}</td>
+        </tr>
+        <tr>
+      <td style="padding: 8px; border: 1px solid #ddd;"><strong>Periodo</strong></td>
+      <td style="padding: 8px; border: 1px solid #ddd;">${start_date} → ${end_date}</td>
+        </tr>
+        <tr>
+      <td style="padding: 8px; border: 1px solid #ddd;"><strong>Totale</strong></td>
+      <td style="padding: 8px; border: 1px solid #ddd;">€${total_price}</td>
+        </tr>
+      </table>
+
+      <p style="color: #666;">Controlla dal pannello admin per gestire la prenotazione.</p>
+    </div>
+    `;
+    
     // Email to admin
     const adminRes = await fetch("https://api.resend.com/emails", {
       method: "POST",
@@ -132,18 +126,41 @@ const camperName = camper?.name || "Camper";
 
     // Email to customer
     const customerHtml = `
-      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-        <h2 style="color: #2d5016;">🚐 Prenotazione Ricevuta</h2>
-        <p>Gentile ${customer_name},</p>
-        <p>Abbiamo ricevuto la tua richiesta di prenotazione. Ecco il riepilogo:</p>
-        <table style="width:100%;border-collapse:collapse;margin:16px 0;">
-          <tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold;">Periodo</td><td style="padding:8px;border:1px solid #ddd;">${start_date} — ${end_date}</td></tr>
-          <tr><td style="padding:8px;border:1px solid #ddd;font-weight:bold;">Importo totale</td><td style="padding:8px;border:1px solid #ddd;">€${total_price}</td></tr>
-        </table>
-        <p>Procedi al pagamento tramite il link che hai ricevuto. Dopo il pagamento, riceverai la conferma definitiva.</p>
-        <p>Per qualsiasi domanda, contattaci a <a href="mailto:camperokroma@gmail.com">camperokroma@gmail.com</a> o al 339-2715067.</p>
-        <p>Grazie e buon viaggio!<br/>Il Team CamperOK</p>
-      </div>
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+      <h2 style="color: #2d5016;">🚐 Richiesta ricevuta!</h2>
+
+      <p>Ciao ${customer_name},</p>
+
+      <p>Abbiamo ricevuto la tua richiesta di prenotazione per il camper:</p>
+
+      <p style="font-size: 18px; font-weight: bold; color: #2d5016;">
+        ${camperName}
+      </p>
+
+      <table style="width:100%;border-collapse:collapse;margin:16px 0;">
+        <tr>
+          <td style="padding:8px;border:1px solid #ddd;"><strong>Periodo</strong></td>
+          <td style="padding:8px;border:1px solid #ddd;">${start_date} — ${end_date}</td>
+        </tr>
+        <tr>
+          <td style="padding:8px;border:1px solid #ddd;"><strong>Totale</strong></td>
+          <td style="padding:8px;border:1px solid #ddd;">€${total_price}</td>
+        </tr>
+      </table>
+
+      <p>👉 Per confermare la prenotazione, completa il pagamento tramite il link che hai ricevuto.</p>
+
+      <p>Se hai bisogno di assistenza:</p>
+      <p>
+        📧 camperokroma@gmail.com<br/>
+        📞 339 2715067
+      </p>
+
+      <p style="margin-top: 30px;">
+        Grazie e buon viaggio! 🚐<br/>
+        <strong>Il Team CamperOK</strong>
+      </p>
+    </div>
     `;
 
     const customerRes = await fetch("https://api.resend.com/emails", {
