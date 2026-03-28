@@ -138,9 +138,10 @@ const Vehicles = () => {
         </div>
       </div>
 
-      <Footer />
-    </div>
-  );
+     <Footer />
+     </div>
+     </>
+     );
 };
 
 export default Vehicles;
