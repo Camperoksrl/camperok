@@ -30,7 +30,6 @@ const Vehicles = () => {
       canonical="https://www.camperok.it/noleggio-camper-roma"
     />
 
-    {/* resto della pagina */}
     <div className="min-h-screen">
       <Navigation />
 
