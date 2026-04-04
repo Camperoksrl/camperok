@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { vehicles } from "@/data/vehicles";
 import { Shield, Clock, MapPin, Headphones, ArrowRight, Star } from "lucide-react";
 import heroRv from "@/assets/hero-rv.jpg";
-import SEO from "../SEO";
+import SEO from "@/components/SEO";
 
 <>
   <SEO
