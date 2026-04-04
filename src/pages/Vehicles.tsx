@@ -6,7 +6,7 @@ import { vehicles, vehicleTypes } from "@/data/vehicles";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { SlidersHorizontal } from "lucide-react";
-import SEO from "../SEO";
+import SEO from "@/components/SEO";
 
 const Vehicles = () => {
   const [selectedType, setSelectedType] = useState("all");
