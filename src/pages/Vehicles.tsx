@@ -137,7 +137,7 @@ const Vehicles = () => {
         </div>
       </div>
 
-     <Footer />
+     <Footer /> 
    </div>
  </>
      );
