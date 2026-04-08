@@ -287,6 +287,7 @@ const VehicleDetail = () => {
                   <div className="bg-destructive/10 border border-destructive/30 rounded-xl p-4 text-sm text-destructive">
                     <p className="font-medium">⚠️ Veicolo non disponibile</p>
                     <p>Dal {unavailablePeriod.start_date} al {unavailablePeriod.end_date}</p>
+                  </div>
                 )}
 
                 {/* Payment type selection */}
