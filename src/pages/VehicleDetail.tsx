@@ -1,9 +1,9 @@
 import { useParams, Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
-import { vehicles, getMinPrice, calculateTotalPrice, hasUnavailableDays } from "@/data/vehicles";
-import { addBooking } from "@/lib/adminStore";
+import { vehicles, getMinPrice, calculateTotalPrice } from "@/data/vehicles";
+import { addBooking, getBookingsForCamper } from "@/lib/adminStore";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -31,6 +31,13 @@ const VehicleDetail = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedImage, setSelectedImage] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [camperBookings, setCamperBookings] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (!vehicle) return;
+
+    getBookingsForCamper(vehicle.dbId || vehicle.id).then(setCamperBookings);
+  }, [vehicle]);
 
   if (!vehicle) {
     return (
@@ -58,7 +65,19 @@ const VehicleDetail = () => {
   const days = getDayCount();
   const totalPrice = days > 0 ? calculateTotalPrice(vehicle, startDate, endDate) : 0;
   const avgPricePerDay = days > 0 ? Math.round(totalPrice / days) : 0;
-  const unavailablePeriod = startDate && endDate && days > 0 ? hasUnavailableDays(vehicle, startDate, endDate) : null;
+
+  const unavailablePeriod =
+    startDate && endDate && days > 0
+      ? camperBookings.find((booking) => {
+          if (booking.status === "cancelled") return false;
+
+          return (
+            new Date(startDate) <= new Date(booking.end_date) &&
+            new Date(endDate) >= new Date(booking.start_date)
+          );
+        })
+      : null;
+
   const depositAmount = Math.round(totalPrice * 0.3);
 
   const handleBooking = async () => {
@@ -267,8 +286,7 @@ const VehicleDetail = () => {
                 {unavailablePeriod && (
                   <div className="bg-destructive/10 border border-destructive/30 rounded-xl p-4 text-sm text-destructive">
                     <p className="font-medium">⚠️ Veicolo non disponibile</p>
-                    <p>Dal {unavailablePeriod.startDate} al {unavailablePeriod.endDate}{unavailablePeriod.reason ? ` — ${unavailablePeriod.reason}` : ""}</p>
-                  </div>
+                    <p>Dal {unavailablePeriod.start_date} al {unavailablePeriod.end_date}</p>
                 )}
 
                 {/* Payment type selection */}
