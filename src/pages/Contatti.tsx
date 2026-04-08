@@ -9,7 +9,6 @@ import { useToast } from "@/hooks/use-toast";
 import { Mail, Phone, MapPin, Clock } from "lucide-react";
 import SEO from "@/components/SEO";
 
-<>
   <SEO
     title="Contatti | CamperOK"
     canonical="https://www.camperok.it/contatti"
