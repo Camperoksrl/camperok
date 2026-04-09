@@ -44,7 +44,6 @@ const VehicleDetail = () => {
 
   useEffect(() => {
     if (!vehicle) return;
-
     getBookingsForCamper(vehicle.dbId || vehicle.id).then(setCamperBookings);
   }, [vehicle]);
 
@@ -79,7 +78,6 @@ const VehicleDetail = () => {
     startDate && endDate && days > 0
       ? camperBookings.find((booking) => {
           if (booking.status === "cancelled") return false;
-
           return (
             new Date(startDate) <= new Date(booking.end_date) &&
             new Date(endDate) >= new Date(booking.start_date)
