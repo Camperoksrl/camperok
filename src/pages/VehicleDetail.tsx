@@ -14,7 +14,7 @@ import { useToast } from "@/hooks/use-toast";
 import {
   Users, BedDouble, Ruler, MapPin, Check, ArrowLeft, Calendar, ChevronRight, Phone, ChevronLeft, X,
 } from "lucide-react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent } from "@/components/ui/dialog"; 
 
 const VehicleDetail = () => {
   const { id } = useParams();
