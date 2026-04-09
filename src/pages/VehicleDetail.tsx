@@ -442,10 +442,7 @@ const VehicleDetail = () => {
                     onCheckedChange={(checked) => setTermsAccepted(checked === true)}
                     className="mt-0.5"
                   />
-                  <label
-                    htmlFor="terms"
-                    className="text-xs text-muted-foreground leading-relaxed cursor-pointer"
-                  >
+                  <div className="text-xs text-muted-foreground leading-relaxed">
                     Dichiaro di aver letto e accettato le{" "}
                     <Link
                       to="/condizioni-noleggio"
@@ -455,9 +452,8 @@ const VehicleDetail = () => {
                       Condizioni Generali di Noleggio
                     </Link>
                     .
-                  </label>
+                  </div>
                 </div>
-
                 <Button
                   className="w-full bg-accent text-accent-foreground hover:bg-accent/90 rounded-full text-base py-6"
                   onClick={handleBooking}
