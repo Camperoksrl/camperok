@@ -9,7 +9,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import SEO from "../SEO";
+import SEO from "@/components/SEO";
 
 <>
   <SEO
