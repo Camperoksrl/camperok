@@ -295,17 +295,13 @@ const VehicleDetail = () => {
                   <p className="text-sm text-muted-foreground">a partire da</p>
                   <p className="text-3xl font-bold text-foreground">
                     €{getMinPrice(vehicle)}
-                    <span className="text-base font-normal text-muted-foreground">
-                      /giorno
-                    </span>
+                    <span className="text-base font-normal text-muted-foreground">/giorno</span>
                   </p>
                 </div>
 
                 <div className="space-y-3">
                   <div>
-                    <Label className="text-sm font-medium text-foreground">
-                      Nome e Cognome
-                    </Label>
+                    <Label className="text-sm font-medium text-foreground">Nome e Cognome</Label>
                     <Input
                       type="text"
                       placeholder="Mario Rossi"
@@ -329,9 +325,7 @@ const VehicleDetail = () => {
                   </div>
 
                   <div>
-                    <Label className="text-sm font-medium text-foreground">
-                      Telefono
-                    </Label>
+                    <Label className="text-sm font-medium text-foreground">Telefono</Label>
                     <div className="relative mt-1">
                       <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                       <Input
@@ -341,132 +335,123 @@ const VehicleDetail = () => {
                         value={customerPhone}
                         onChange={(e) => setCustomerPhone(e.target.value)}
                         maxLength={30}
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <Label className="text-sm font-medium text-foreground">
-                      Data Ritiro
-                    </Label>
-                    <div className="relative mt-1">
-                      <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        type="date"
-                        className="pl-10 rounded-xl"
-                        value={startDate}
-                        onChange={(e) => setStartDate(e.target.value)}
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <Label className="text-sm font-medium text-foreground">
-                      Data Riconsegna
-                    </Label>
-                    <div className="relative mt-1">
-                      <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        type="date"
-                        className="pl-10 rounded-xl"
-                        value={endDate}
-                        onChange={(e) => setEndDate(e.target.value)}
-                      />
-                    </div>
-                  </div>
+                    />
+                 </div>
                 </div>
 
-                {days > 0 && (
-                  <div className="bg-secondary rounded-xl p-4 space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-muted-foreground">
-                        ~€{avgPricePerDay} × {days} giorni
-                      </span>
-                      <span className="text-foreground font-medium">€{totalPrice}</span>
-                    </div>
-                    <div className="flex justify-between font-bold text-lg border-t border-border pt-2">
-                      <span className="text-foreground">Totale</span>
-                      <span className="text-primary">€{totalPrice}</span>
-                    </div>
-                  </div>
-                )}
+      <div>
+        <Label className="text-sm font-medium text-foreground">Data Ritiro</Label>
+        <div className="relative mt-1">
+          <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            type="date"
+            className="pl-10 rounded-xl"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          />
+        </div>
+      </div>
 
-                {unavailablePeriod && (
-                  <div className="bg-destructive/10 border border-destructive/30 rounded-xl p-4 text-sm text-destructive">
-                    <p className="font-medium">⚠️ Veicolo non disponibile</p>
-                    <p>
-                      Dal {unavailablePeriod.start_date} al {unavailablePeriod.end_date}
-                    </p>
-                  </div>
-                )}
+      <div>
+        <Label className="text-sm font-medium text-foreground">Data Riconsegna</Label>
+        <div className="relative mt-1">
+          <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            type="date"
+            className="pl-10 rounded-xl"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+          />
+        </div>
+      </div>
+    </div>
 
-                {days > 0 && !unavailablePeriod && (
-                  <div className="space-y-2">
-                    <Label className="text-sm font-medium text-foreground">
-                      Modalità di pagamento
-                    </Label>
-                    <div className="grid grid-cols-2 gap-2">
-                      <button
-                        type="button"
-                        onClick={() => setPaymentType("deposit")}
-                        className={`rounded-xl border p-3 text-center text-sm transition-all ${
-                          paymentType === "deposit"
-                            ? "border-primary bg-primary/10 text-foreground"
-                            : "border-border text-muted-foreground hover:border-primary/50"
-                        }`}
-                      >
-                        <p className="font-semibold">Caparra 30%</p>
-                        <p className="text-xs mt-1">€{depositAmount}</p>
-                      </button>
+    {days > 0 && (
+      <div className="bg-secondary rounded-xl p-4 space-y-2">
+        <div className="flex justify-between text-sm">
+          <span className="text-muted-foreground">~€{avgPricePerDay} × {days} giorni</span>
+          <span className="text-foreground font-medium">€{totalPrice}</span>
+        </div>
+        <div className="flex justify-between font-bold text-lg border-t border-border pt-2">
+          <span className="text-foreground">Totale</span>
+          <span className="text-primary">€{totalPrice}</span>
+        </div>
+      </div>
+    )}
 
-                      <button
-                        type="button"
-                        onClick={() => setPaymentType("full")}
-                        className={`rounded-xl border p-3 text-center text-sm transition-all ${
-                          paymentType === "full"
-                            ? "border-primary bg-primary/10 text-foreground"
-                            : "border-border text-muted-foreground hover:border-primary/50"
-                        }`}
-                      >
-                        <p className="font-semibold">Totale</p>
-                        <p className="text-xs mt-1">€{totalPrice}</p>
-                      </button>
-                    </div>
-                  </div>
-                )}
+    {unavailablePeriod && (
+      <div className="bg-destructive/10 border border-destructive/30 rounded-xl p-4 text-sm text-destructive">
+        <p className="font-medium">⚠️ Veicolo non disponibile</p>
+        <p>Dal {unavailablePeriod.start_date} al {unavailablePeriod.end_date}</p>
+      </div>
+    )}
 
-                <div className="flex items-start gap-3">
-                  <Checkbox
-                    id="terms"
-                    checked={termsAccepted}
-                    onCheckedChange={(checked) => setTermsAccepted(checked === true)}
-                    className="mt-0.5"
-                  />
-                  <div className="text-xs text-muted-foreground leading-relaxed">
-                    Dichiaro di aver letto e accettato le{" "}
-                    <Link
-                      to="/condizioni-noleggio"
-                      target="_blank"
-                      className="text-primary underline hover:text-primary/80"
-                    >
-                      Condizioni Generali di Noleggio
-                    </Link>
-                    .
-                  </div>
-                </div>
-                <Button
-                  className="w-full bg-accent text-accent-foreground hover:bg-accent/90 rounded-full text-base py-6"
-                  onClick={handleBooking}
-                  disabled={!!unavailablePeriod || isSubmitting || !termsAccepted}
-                >
-                  {isSubmitting ? "Invio in corso..." : "Prenota e Paga"}
-                </Button>
+    {days > 0 && !unavailablePeriod && (
+      <div className="space-y-2">
+        <Label className="text-sm font-medium text-foreground">Modalità di pagamento</Label>
+        <div className="grid grid-cols-2 gap-2">
+          <button
+            type="button"
+            onClick={() => setPaymentType("deposit")}
+            className={`rounded-xl border p-3 text-center text-sm transition-all ${
+              paymentType === "deposit"
+                ? "border-primary bg-primary/10 text-foreground"
+                : "border-border text-muted-foreground hover:border-primary/50"
+            }`}
+          >
+            <p className="font-semibold">Caparra 30%</p>
+            <p className="text-xs mt-1">€{depositAmount}</p>
+          </button>
 
-                <p className="text-xs text-muted-foreground text-center">
-                  Verrai reindirizzato a Stripe per il pagamento sicuro.
-                </p>
-              </div>
-            </div>
+          <button
+            type="button"
+            onClick={() => setPaymentType("full")}
+            className={`rounded-xl border p-3 text-center text-sm transition-all ${
+              paymentType === "full"
+                ? "border-primary bg-primary/10 text-foreground"
+                : "border-border text-muted-foreground hover:border-primary/50"
+            }`}
+          >
+            <p className="font-semibold">Totale</p>
+            <p className="text-xs mt-1">€{totalPrice}</p>
+          </button>
+        </div>
+      </div>
+    )}
+
+    <div className="flex items-start gap-3">
+      <Checkbox
+        id="terms"
+        checked={termsAccepted}
+        onCheckedChange={(checked) => setTermsAccepted(checked === true)}
+        className="mt-0.5"
+      />
+      <div className="text-xs text-muted-foreground leading-relaxed">
+        Dichiaro di aver letto e accettato le{" "}
+        <Link
+          to="/condizioni-noleggio"
+          target="_blank"
+          className="text-primary underline hover:text-primary/80"
+        >
+          Condizioni Generali di Noleggio
+        </Link>
+        .
+      </div>
+    </div>
+
+    <Button
+      className="w-full bg-accent text-accent-foreground hover:bg-accent/90 rounded-full text-base py-6"
+      onClick={handleBooking}
+      disabled={!!unavailablePeriod || isSubmitting || !termsAccepted}
+    >
+      {isSubmitting ? "Invio in corso..." : "Prenota e Paga"}
+    </Button>
+
+    <p className="text-xs text-muted-foreground text-center">
+      Verrai reindirizzato a Stripe per il pagamento sicuro.
+    </p>
+  </div>
+</div>
           </div>
         </div>
       </div>
