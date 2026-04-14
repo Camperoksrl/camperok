@@ -9,7 +9,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import SEO from "@/components/SEO";
+import SEO from "@/components/SEO"; 
 
 const steps = [
   {
