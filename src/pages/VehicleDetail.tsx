@@ -28,6 +28,17 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 const VehicleDetail = () => {
   const { id } = useParams();
   const vehicle = vehicles.find((v) => v.id === id);
+  const getCanonicalCamperId = (name: string) => {
+  const lower = name.toLowerCase();
+
+  if (lower.includes("rimor")) return "Rimor";
+  if (lower.includes("roller")) return "Roller Team";
+  if (lower.includes("knaus")) return "Knaus";
+
+  return name;
+};
+
+const canonicalCamperId = vehicle ? getCanonicalCamperId(vehicle.name) : "";
   const { toast } = useToast();
 
   const [startDate, setStartDate] = useState("");
@@ -44,7 +55,7 @@ const VehicleDetail = () => {
 
   useEffect(() => {
     if (!vehicle) return;
-    getBookingsForCamper(vehicle.dbId || vehicle.id).then(setCamperBookings);
+    getBookingsForCamper(canonicalCamperId).then(setCamperBookings);
   }, [vehicle]);
 
   if (!vehicle) {
@@ -138,8 +149,8 @@ const VehicleDetail = () => {
 
     try {
       const result = await addBooking({
-        camper_id: vehicle.dbId || vehicle.id,
-        camper_name: vehicle.name,
+        camper_id: canonicalCamperId,
+        camper_name: canonicalCamperId,
         customer_name: customerName.trim().slice(0, 200),
         customer_email: customerEmail.trim().slice(0, 255).toLowerCase(),
         start_date: startDate,
