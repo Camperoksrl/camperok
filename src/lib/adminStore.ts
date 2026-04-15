@@ -89,22 +89,58 @@ export const getBookings = async (): Promise<Booking[]> => {
   return data as Booking[];
 };
 
-export const addBooking = async (booking: Omit<Booking, "id" | "created_at" | "status"> & { phone?: string | null; terms_accepted_at?: string; payment_type?: string }): Promise<{ success: true; booking_id: string } | { error: string }> => {
+export const addBooking = async (
+  booking: Omit<Booking, "id" | "created_at" | "status"> & {
+    phone?: string | null;
+    terms_accepted_at?: string;
+    payment_type?: string;
+  }
+): Promise<{ success: true; booking_id: string } | { error: string }> => {
   const { phone, terms_accepted_at, payment_type, ...bookingData } = booking;
-  const insertData: Record<string, unknown> = { ...bookingData, status: "pending" };
+
+  const insertData: Record<string, unknown> = {
+    ...bookingData,
+    status: "pending",
+  };
+
   if (phone) insertData.phone = phone;
   if (terms_accepted_at) insertData.terms_accepted_at = terms_accepted_at;
   if (payment_type) insertData.payment_type = payment_type;
 
-  const { data, error } = await supabase.from("bookings").insert(insertData as any).select("id").single();
+  // Controllo sovrapposizione date sullo stesso camper
+  const { data: existingBookings, error: checkError } = await supabase
+    .from("bookings")
+    .select("id, start_date, end_date, status")
+    .eq("camper_id", booking.camper_id)
+    .neq("status", "cancelled")
+    .lte("start_date", booking.end_date)
+    .gte("end_date", booking.start_date);
+
+  if (checkError) {
+    if (import.meta.env.DEV) console.error("Overlap check error:", checkError);
+    return { error: "CHECK_FAILED" };
+  }
+
+  if (existingBookings && existingBookings.length > 0) {
+    return { error: "DATE_NOT_AVAILABLE" };
+  }
+
+  const { data, error } = await supabase
+    .from("bookings")
+    .insert(insertData as any)
+    .select("id")
+    .single();
+
   if (error) return { error: error.message };
 
   // Fire-and-forget email notification
-  supabase.functions.invoke("notify-booking", {
-    body: { ...booking, id: data.id },
-  }).catch((err) => {
-    if (import.meta.env.DEV) console.error("Notification error:", err);
-  });
+  supabase.functions
+    .invoke("notify-booking", {
+      body: { ...booking, id: data.id },
+    })
+    .catch((err) => {
+      if (import.meta.env.DEV) console.error("Notification error:", err);
+    });
 
   return { success: true, booking_id: data.id };
 };
