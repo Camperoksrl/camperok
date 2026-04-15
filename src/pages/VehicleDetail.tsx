@@ -151,11 +151,20 @@ const VehicleDetail = () => {
       });
 
       if ("error" in result) {
-        toast({
-          title: "Errore",
-          description: "Non è stato possibile inviare la prenotazione. Riprova.",
-          variant: "destructive",
-        });
+  if (result.error === "DATE_NOT_AVAILABLE") {
+    toast({
+      title: "Periodo non disponibile",
+      description: "Questo camper è già prenotato nelle date selezionate.",
+      variant: "destructive",
+    });
+    return;
+  }
+
+  toast({
+    title: "Errore",
+    description: "Non è stato possibile inviare la prenotazione. Riprova.",
+    variant: "destructive",
+  });
       } else if ("booking_id" in result) {
         toast({
           title: "Prenotazione registrata ✅",
