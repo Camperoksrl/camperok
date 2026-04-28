@@ -18,6 +18,7 @@ import BookingConfirmed from "./pages/BookingConfirmed";
 import CookieBanner from "./components/CookieBanner";
 import PrenotazioneConfermata from "./pages/PrenotazioneConfermata";
 import CancellaPrenotazione from "./pages/CancellaPrenotazione";
+import Admin from "./pages/Admin";
 
 const queryClient = new QueryClient();
 
@@ -59,6 +60,7 @@ const App = () => (
           <Route path="/prenotazione-confermata" element={<BookingConfirmed />} />
           <Route path="/prenotazione-confermata" element={<PrenotazioneConfermata />} />
           <Route path="/cancella-prenotazione" element={<CancellaPrenotazione />} />
+          <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <CookieBanner />
