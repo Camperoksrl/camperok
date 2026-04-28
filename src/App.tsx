@@ -16,6 +16,7 @@ import CookiesPolicy from "./pages/CookiesPolicy";
 import RentalTerms from "./pages/RentalTerms";
 import BookingConfirmed from "./pages/BookingConfirmed";
 import CookieBanner from "./components/CookieBanner";
+import PrenotazioneConfermata from "./pages/PrenotazioneConfermata";
 
 const queryClient = new QueryClient();
 
@@ -55,6 +56,7 @@ const App = () => (
           <Route path="/cookie-policy" element={<CookiesPolicy />} />
           <Route path="/condizioni-noleggio" element={<RentalTerms />} />
           <Route path="/prenotazione-confermata" element={<BookingConfirmed />} />
+          <Route path="/prenotazione-confermata" element={<PrenotazioneConfermata />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <CookieBanner />
