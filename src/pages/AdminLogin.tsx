@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { adminLogin } from "@/lib/adminStore";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Lock } from "lucide-react";
 
+const ADMIN_EMAIL = "admin@camperok.it";
+
 const AdminLogin = () => {
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("admin@camperok.it");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -18,12 +20,25 @@ const AdminLogin = () => {
     e.preventDefault();
     setLoading(true);
     setError("");
-    const success = await adminLogin(email, password);
-    if (success) {
-      navigate("/admin");
-    } else {
-      setError("Credenziali non valide.");
+
+    if (email.toLowerCase().trim() !== ADMIN_EMAIL) {
+      setError("Email non autorizzata.");
+      setLoading(false);
+      return;
     }
+
+    const { error: loginError } = await supabase.auth.signInWithPassword({
+      email: email.trim(),
+      password,
+    });
+
+    if (loginError) {
+      setError("Credenziali non valide.");
+      setLoading(false);
+      return;
+    }
+
+    navigate("/admin");
     setLoading(false);
   };
 
@@ -35,19 +50,37 @@ const AdminLogin = () => {
             <Lock className="h-6 w-6 text-primary" />
           </div>
           <CardTitle className="text-2xl">Pannello Admin</CardTitle>
-          <p className="text-sm text-muted-foreground mt-1">Accedi per gestire camper e prenotazioni</p>
+          <p className="text-sm text-muted-foreground mt-1">
+            Accedi per gestire camper e prenotazioni
+          </p>
         </CardHeader>
+
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <Label>Email</Label>
-              <Input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="admin@camperok.it" required />
+              <Input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="admin@camperok.it"
+                required
+              />
             </div>
+
             <div>
               <Label>Password</Label>
-              <Input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" required />
+              <Input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                required
+              />
             </div>
+
             {error && <p className="text-sm text-destructive">{error}</p>}
+
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? "Accesso in corso..." : "Accedi"}
             </Button>
