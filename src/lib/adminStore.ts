@@ -26,25 +26,13 @@ export interface Booking {
 }
 
 // --- Auth ---
-export const adminLogin = async (email: string, password: string): Promise<boolean> => {
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
-  return !error;
+export const isAdminLoggedIn = async (): Promise<boolean> => {
+  const { data } = await supabase.auth.getSession();
+  return !!data.session;
 };
 
 export const adminLogout = async () => {
   await supabase.auth.signOut();
-};
-
-export const isAdminLoggedIn = async (): Promise<boolean> => {
-  const { data } = await supabase.auth.getSession();
-  if (!data.session) return false;
-  // Check admin role
-  const { data: roles } = await supabase
-    .from("user_roles")
-    .select("role")
-    .eq("user_id", data.session.user.id)
-    .eq("role", "admin");
-  return !!(roles && roles.length > 0);
 };
 
 export const getCurrentUserId = async (): Promise<string | null> => {
@@ -54,26 +42,63 @@ export const getCurrentUserId = async (): Promise<string | null> => {
 
 // --- Campers CRUD ---
 export const getCampers = async (): Promise<Camper[]> => {
-  const { data, error } = await supabase.from("campers").select("*").order("created_at");
-  if (error) { if (import.meta.env.DEV) console.error("getCampers error:", error); return []; }
+  const { data, error } = await supabase
+    .from("campers")
+    .select("*")
+    .order("created_at");
+
+  if (error) {
+    if (import.meta.env.DEV) console.error("getCampers error:", error);
+    return [];
+  }
+
   return data as Camper[];
 };
 
 export const getCamper = async (id: string): Promise<Camper | null> => {
-  const { data, error } = await supabase.from("campers").select("*").eq("id", id).single();
+  const { data, error } = await supabase
+    .from("campers")
+    .select("*")
+    .eq("id", id)
+    .single();
+
   if (error) return null;
   return data as Camper;
 };
 
-export const addCamper = async (camper: Omit<Camper, "id" | "created_at">): Promise<Camper | null> => {
-  const { data, error } = await supabase.from("campers").insert(camper).select().single();
-  if (error) { if (import.meta.env.DEV) console.error("addCamper error:", error); return null; }
+export const addCamper = async (
+  camper: Omit<Camper, "id" | "created_at">
+): Promise<Camper | null> => {
+  const { data, error } = await supabase
+    .from("campers")
+    .insert(camper)
+    .select()
+    .single();
+
+  if (error) {
+    if (import.meta.env.DEV) console.error("addCamper error:", error);
+    return null;
+  }
+
   return data as Camper;
 };
 
-export const updateCamper = async (id: string, updates: Partial<Omit<Camper, "id" | "created_at">>): Promise<Camper | null> => {
-  const { data, error } = await supabase.from("campers").update(updates).eq("id", id).select().single();
-  if (error) { if (import.meta.env.DEV) console.error("updateCamper error:", error); return null; }
+export const updateCamper = async (
+  id: string,
+  updates: Partial<Omit<Camper, "id" | "created_at">>
+): Promise<Camper | null> => {
+  const { data, error } = await supabase
+    .from("campers")
+    .update(updates)
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) {
+    if (import.meta.env.DEV) console.error("updateCamper error:", error);
+    return null;
+  }
+
   return data as Camper;
 };
 
@@ -84,8 +109,16 @@ export const deleteCamper = async (id: string): Promise<boolean> => {
 
 // --- Bookings CRUD ---
 export const getBookings = async (): Promise<Booking[]> => {
-  const { data, error } = await supabase.from("bookings").select("*").order("start_date", { ascending: true });
-  if (error) { if (import.meta.env.DEV) console.error("getBookings error:", error); return []; }
+  const { data, error } = await supabase
+    .from("bookings")
+    .select("*")
+    .order("start_date", { ascending: true });
+
+  if (error) {
+    if (import.meta.env.DEV) console.error("getBookings error:", error);
+    return [];
+  }
+
   return data as Booking[];
 };
 
@@ -107,7 +140,6 @@ export const addBooking = async (
   if (terms_accepted_at) insertData.terms_accepted_at = terms_accepted_at;
   if (payment_type) insertData.payment_type = payment_type;
 
-  // Controllo sovrapposizione date sullo stesso camper
   const { data: existingBookings, error: checkError } = await supabase
     .from("bookings")
     .select("id, start_date, end_date, status")
@@ -133,7 +165,6 @@ export const addBooking = async (
 
   if (error) return { error: error.message };
 
-  // Fire-and-forget email notification
   supabase.functions
     .invoke("notify-booking", {
       body: { ...booking, id: data.id },
@@ -145,9 +176,22 @@ export const addBooking = async (
   return { success: true, booking_id: data.id };
 };
 
-export const updateBookingStatus = async (id: string, status: Booking["status"]): Promise<Booking | null> => {
-  const { data, error } = await supabase.from("bookings").update({ status }).eq("id", id).select().single();
-  if (error) { if (import.meta.env.DEV) console.error("updateBookingStatus error:", error); return null; }
+export const updateBookingStatus = async (
+  id: string,
+  status: Booking["status"]
+): Promise<Booking | null> => {
+  const { data, error } = await supabase
+    .from("bookings")
+    .update({ status })
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) {
+    if (import.meta.env.DEV) console.error("updateBookingStatus error:", error);
+    return null;
+  }
+
   return data as Booking;
 };
 
@@ -156,26 +200,34 @@ export const deleteBooking = async (id: string): Promise<boolean> => {
   return !error;
 };
 
-export const getBookingsForCamper = async (camperId: string): Promise<Booking[]> => {
+export const getBookingsForCamper = async (
+  camperId: string
+): Promise<Booking[]> => {
   const { data, error } = await supabase
     .from("bookings")
     .select("*")
     .eq("camper_id", camperId)
     .neq("status", "cancelled");
+
   if (error) return [];
   return data as Booking[];
 };
 
-export const getBookedDatesForCamper = async (camperId: string): Promise<Date[]> => {
+export const getBookedDatesForCamper = async (
+  camperId: string
+): Promise<Date[]> => {
   const bookings = await getBookingsForCamper(camperId);
   const dates: Date[] = [];
+
   for (const b of bookings) {
     const current = new Date(b.start_date);
     const end = new Date(b.end_date);
+
     while (current <= end) {
       dates.push(new Date(current));
       current.setDate(current.getDate() + 1);
     }
   }
+
   return dates;
 };
