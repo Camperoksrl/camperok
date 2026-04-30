@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import {
+  isAdminLoggedIn,
   adminLogout,
   getCampers,
   getBookings,
@@ -26,8 +27,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { useToast } from "@/hooks/use-toast";
 import { LogOut, Plus, Pencil, Trash2, Truck, CalendarDays, ClipboardList, Home, Calendar, Download } from "lucide-react";
 import BookingCalendar from "@/components/BookingCalendar";
-
-const ADMIN_EMAIL = "admin@camperok.it";
 
 const statusColors: Record<string, string> = {
   pending: "bg-yellow-100 text-yellow-800 border-yellow-300",
@@ -80,14 +79,12 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
+      const loggedIn = await isAdminLoggedIn();
 
-      if (!user || user.email !== ADMIN_EMAIL) {
-        navigate("/admin/login");
-        return;
-      }
+if (!loggedIn) {
+  navigate("/admin/login");
+  return;
+}
 
       await refresh();
       setLoading(false);
