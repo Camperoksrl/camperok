@@ -7,10 +7,10 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Lock } from "lucide-react";
 
-const ADMIN_EMAIL = "admin@camperok.it";
+const ADMIN_EMAIL = "camperokroma@gmail.com";
 
 const AdminLogin = () => {
-  const [email, setEmail] = useState("admin@camperok.it");
+  const [email, setEmail] = useState("camperokroma@gmail.com");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
